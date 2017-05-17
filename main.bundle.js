@@ -6,7 +6,7 @@ webpackJsonp([0,4],{
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(79);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__(39);
@@ -727,6 +727,9 @@ var Sketch = (function () {
     Sketch.prototype.getUserId = function () {
         return this.user_id;
     };
+    Sketch.prototype.getDescription = function () {
+        return this.description;
+    };
     return Sketch;
 }());
 //# sourceMappingURL=/Users/andrei/Workspace/Dizertatie/PAClient/src/sketch.js.map
@@ -739,7 +742,7 @@ var Sketch = (function () {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__authentication_service__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user__ = __webpack_require__(539);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user__ = __webpack_require__(541);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthenticationComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1046,6 +1049,134 @@ var ImageService = (function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environments_environment__ = __webpack_require__(39);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LaptopInputComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var LaptopInputComponent = (function () {
+    function LaptopInputComponent(ng2cable, broadcaster) {
+        this.ng2cable = ng2cable;
+        this.broadcaster = broadcaster;
+        this.events = [];
+        this.url = __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* ENV */].apiWs;
+        this.deviceType = 'Input';
+        // private mac: string = `${localStorage.getItem('atrato-user-id')}|${BrowserDetails.getDetails()}|${this.deviceType}`;
+        this.mac = localStorage.getItem('atrato-user-id') + "|LaptopInput";
+        this.events.push("Registering laptop with mac: " + this.mac);
+        this.ng2cable.setCable(this.url);
+    }
+    LaptopInputComponent.prototype.ngOnInit = function () {
+        this.registerToChannel();
+    };
+    LaptopInputComponent.prototype.registerToChannel = function () {
+        this.ng2cable.subscription = this.ng2cable.cable.subscriptions.create({ channel: 'SketchChannel',
+            mac: this.mac, type: this.deviceType, user_id: localStorage.getItem('atrato-user-id') });
+        this.events.push("Started connection with " + this.ng2cable.subscription.consumer.url);
+    };
+    LaptopInputComponent.prototype.triggerInput = function () {
+        this.ng2cable.subscription.perform('blink', { 'mac': this.mac });
+    };
+    LaptopInputComponent.prototype.ngOnDestroy = function () {
+        this.ng2cable.unsubscribe();
+    };
+    LaptopInputComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-laptop-input',
+            template: __webpack_require__(734),
+            styles: [__webpack_require__(714)]
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Broadcaster"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Broadcaster"]) === 'function' && _b) || Object])
+    ], LaptopInputComponent);
+    return LaptopInputComponent;
+    var _a, _b;
+}());
+//# sourceMappingURL=/Users/andrei/Workspace/Dizertatie/PAClient/src/laptop-input.component.js.map
+
+/***/ }),
+
+/***/ 350:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environments_environment__ = __webpack_require__(39);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LaptopOutputComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var LaptopOutputComponent = (function () {
+    function LaptopOutputComponent(ng2cable) {
+        this.ng2cable = ng2cable;
+        this.events = [];
+        this.url = __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* ENV */].apiWs;
+        this.deviceType = 'Screen';
+        // private mac: string = `${localStorage.getItem('atrato-user-id')}|${BrowserDetails.getDetails()}${this.deviceType}`;
+        this.mac = localStorage.getItem('atrato-user-id') + "|LaptopScreen";
+        this.events.push("Registering laptop with mac: " + this.mac);
+        this.ng2cable.setCable(this.url);
+    }
+    LaptopOutputComponent.prototype.ngOnInit = function () {
+        this.registerToChannel();
+    };
+    LaptopOutputComponent.prototype.registerToChannel = function () {
+        var _this = this;
+        this.ng2cable.subscription = this.ng2cable.cable.subscriptions.create({ channel: 'SketchChannel',
+            mac: this.mac, type: this.deviceType, user_id: localStorage.getItem('atrato-user-id') }, {
+            received: function (data) {
+                var message = data.message;
+                _this.events.push("Received channel message with type: " + message.type);
+                window.open(message.url);
+            }
+        });
+        this.events.push("Started connection with " + this.ng2cable.subscription.consumer.url);
+    };
+    LaptopOutputComponent.prototype.ngOnDestroy = function () {
+        this.ng2cable.unsubscribe();
+    };
+    LaptopOutputComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-laptop-output',
+            template: __webpack_require__(735),
+            styles: [__webpack_require__(715)]
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"]) === 'function' && _a) || Object])
+    ], LaptopOutputComponent);
+    return LaptopOutputComponent;
+    var _a;
+}());
+//# sourceMappingURL=/Users/andrei/Workspace/Dizertatie/PAClient/src/laptop-output.component.js.map
+
+/***/ }),
+
+/***/ 351:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(81);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LaptopComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1057,20 +1188,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var LaptopComponent = (function () {
-    function LaptopComponent() {
+    function LaptopComponent(router) {
+        this.router = router;
     }
     LaptopComponent.prototype.ngOnInit = function () {
     };
     LaptopComponent.prototype.ngOnDestroy = function () {
     };
     LaptopComponent.prototype.activateOutput = function () {
-        this.input = false;
-        this.output = true;
+        this.router.navigate(['/laptop-output']);
     };
     LaptopComponent.prototype.activateInput = function () {
-        this.output = false;
-        this.input = true;
+        this.router.navigate(['/laptop-input']);
     };
     LaptopComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -1078,15 +1209,16 @@ var LaptopComponent = (function () {
             template: __webpack_require__(736),
             styles: [__webpack_require__(716)]
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === 'function' && _a) || Object])
     ], LaptopComponent);
     return LaptopComponent;
+    var _a;
 }());
 //# sourceMappingURL=/Users/andrei/Workspace/Dizertatie/PAClient/src/laptop.component.js.map
 
 /***/ }),
 
-/***/ 350:
+/***/ 352:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1144,7 +1276,7 @@ var CodeService = (function () {
 
 /***/ }),
 
-/***/ 351:
+/***/ 353:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1197,7 +1329,7 @@ var LinkService = (function () {
 
 /***/ }),
 
-/***/ 352:
+/***/ 354:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1253,13 +1385,13 @@ var LogsComponent = (function () {
 
 /***/ }),
 
-/***/ 353:
+/***/ 355:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sketch_sketch_service__ = __webpack_require__(112);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__board_board_service__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__board_board_service__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__authentication_authentication_service__ = __webpack_require__(109);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MarketplaceComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1288,6 +1420,7 @@ var MarketplaceComponent = (function () {
             _this.boards = boards;
             _this.boardTypes = _this.boards.map(function (board) { return board.getType(); });
         });
+        window.$.getScript("https://checkout.stripe.com/checkout.js", function (data, textStatus, jqxhr) { });
     };
     MarketplaceComponent.prototype.hardwareClass = function (type) {
         if (this.boardTypes.includes(type)) {
@@ -1338,6 +1471,22 @@ var MarketplaceComponent = (function () {
             .purchase(sketch, this.authenticationService.getCurrentUserId())
             .then(function (sketch) { return _this.authenticationService.redirectToRoot({ id: sketch.getId() }); });
     };
+    MarketplaceComponent.prototype.openCheckout = function (sketch) {
+        var _this = this;
+        var handler = window.StripeCheckout.configure({
+            key: 'pk_test_8lOLmwnqNxolTOAC5sGEOwng',
+            locale: 'auto',
+            currency: 'gbp',
+            token: function (token) {
+                _this.buySketch(sketch);
+            }
+        });
+        handler.open({
+            name: sketch.getName(),
+            description: sketch.getDescription(),
+            amount: 500
+        });
+    };
     MarketplaceComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-marketplace',
@@ -1353,14 +1502,14 @@ var MarketplaceComponent = (function () {
 
 /***/ }),
 
-/***/ 354:
+/***/ 356:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__link_link_service__ = __webpack_require__(351);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(106);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__board_board_service__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__link_link_service__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__board_board_service__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sketch_sketch_service__ = __webpack_require__(112);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_cable_js_index__ = __webpack_require__(119);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_cable_js_index___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_ng2_cable_js_index__);
@@ -1599,12 +1748,12 @@ var SketchEditorComponent = (function () {
 
 /***/ }),
 
-/***/ 355:
+/***/ 357:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sketch_sketch_service__ = __webpack_require__(112);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SketchManagerComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1750,12 +1899,12 @@ var SketchManagerComponent = (function () {
 
 /***/ }),
 
-/***/ 356:
+/***/ 358:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__board_board_service__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__board_board_service__ = __webpack_require__(83);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserBoardsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1821,7 +1970,7 @@ var ENV = {
 
 /***/ }),
 
-/***/ 414:
+/***/ 416:
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -1830,21 +1979,21 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 414;
+webpackEmptyContext.id = 416;
 
 
 /***/ }),
 
-/***/ 415:
+/***/ 417:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills_ts__ = __webpack_require__(553);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(505);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(507);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_app_module__ = __webpack_require__(538);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_app_module__ = __webpack_require__(540);
 
 
 
@@ -1858,13 +2007,13 @@ __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dyna
 
 /***/ }),
 
-/***/ 535:
+/***/ 537:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__board_config__ = __webpack_require__(110);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__board_board_service__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__board_board_service__ = __webpack_require__(83);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActiveBoardsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1954,21 +2103,23 @@ var ActiveBoardsComponent = (function () {
 
 /***/ }),
 
-/***/ 536:
+/***/ 538:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(106);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sketch_manager_sketch_manager_component__ = __webpack_require__(355);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__sketch_editor_sketch_editor_component__ = __webpack_require__(354);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__laptop_laptop_component__ = __webpack_require__(349);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__logs_logs_component__ = __webpack_require__(352);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__marketplace_marketplace_component__ = __webpack_require__(353);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__user_boards_user_boards_component__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__authentication_authentication_component__ = __webpack_require__(345);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__home_home_component__ = __webpack_require__(347);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__authentication_authentication_service__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sketch_manager_sketch_manager_component__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__sketch_editor_sketch_editor_component__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__laptop_laptop_component__ = __webpack_require__(351);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__laptop_laptop_input_laptop_input_component__ = __webpack_require__(349);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__laptop_laptop_output_laptop_output_component__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__logs_logs_component__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__marketplace_marketplace_component__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__user_boards_user_boards_component__ = __webpack_require__(358);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__authentication_authentication_component__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__home_home_component__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__authentication_authentication_service__ = __webpack_require__(109);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppRoutingModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1990,16 +2141,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var routes = [
     { path: '', redirectTo: '/authentication', pathMatch: 'full' },
-    { path: 'home', component: __WEBPACK_IMPORTED_MODULE_9__home_home_component__["a" /* HomeComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_10__authentication_authentication_service__["a" /* AuthenticationService */]] },
-    { path: 'authentication', component: __WEBPACK_IMPORTED_MODULE_8__authentication_authentication_component__["a" /* AuthenticationComponent */] },
-    { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_3__sketch_editor_sketch_editor_component__["a" /* SketchEditorComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_10__authentication_authentication_service__["a" /* AuthenticationService */]] },
+    { path: 'home', component: __WEBPACK_IMPORTED_MODULE_11__home_home_component__["a" /* HomeComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_12__authentication_authentication_service__["a" /* AuthenticationService */]] },
+    { path: 'authentication', component: __WEBPACK_IMPORTED_MODULE_10__authentication_authentication_component__["a" /* AuthenticationComponent */] },
+    { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_3__sketch_editor_sketch_editor_component__["a" /* SketchEditorComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_12__authentication_authentication_service__["a" /* AuthenticationService */]] },
     { path: 'laptop', component: __WEBPACK_IMPORTED_MODULE_4__laptop_laptop_component__["a" /* LaptopComponent */] },
-    { path: 'logs', component: __WEBPACK_IMPORTED_MODULE_5__logs_logs_component__["a" /* LogsComponent */] },
-    { path: 'myboards', component: __WEBPACK_IMPORTED_MODULE_7__user_boards_user_boards_component__["a" /* UserBoardsComponent */] },
-    { path: 'marketplace', component: __WEBPACK_IMPORTED_MODULE_6__marketplace_marketplace_component__["a" /* MarketplaceComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_10__authentication_authentication_service__["a" /* AuthenticationService */]] },
-    { path: 'sketches', component: __WEBPACK_IMPORTED_MODULE_2__sketch_manager_sketch_manager_component__["a" /* SketchManagerComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_10__authentication_authentication_service__["a" /* AuthenticationService */]] }
+    { path: 'laptop-input', component: __WEBPACK_IMPORTED_MODULE_5__laptop_laptop_input_laptop_input_component__["a" /* LaptopInputComponent */] },
+    { path: 'laptop-output', component: __WEBPACK_IMPORTED_MODULE_6__laptop_laptop_output_laptop_output_component__["a" /* LaptopOutputComponent */] },
+    { path: 'logs', component: __WEBPACK_IMPORTED_MODULE_7__logs_logs_component__["a" /* LogsComponent */] },
+    { path: 'myboards', component: __WEBPACK_IMPORTED_MODULE_9__user_boards_user_boards_component__["a" /* UserBoardsComponent */] },
+    { path: 'marketplace', component: __WEBPACK_IMPORTED_MODULE_8__marketplace_marketplace_component__["a" /* MarketplaceComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_12__authentication_authentication_service__["a" /* AuthenticationService */]] },
+    { path: 'sketches', component: __WEBPACK_IMPORTED_MODULE_2__sketch_manager_sketch_manager_component__["a" /* SketchManagerComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_12__authentication_authentication_service__["a" /* AuthenticationService */]] }
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {
@@ -2018,7 +2173,7 @@ var AppRoutingModule = (function () {
 
 /***/ }),
 
-/***/ 537:
+/***/ 539:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2064,7 +2219,7 @@ var AppComponent = (function () {
 
 /***/ }),
 
-/***/ 538:
+/***/ 540:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2073,32 +2228,32 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index__ = __webpack_require__(119);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__(496);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__(498);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_http__ = __webpack_require__(79);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_routing_module__ = __webpack_require__(536);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_routing_module__ = __webpack_require__(538);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pipes_capitalize_pipe__ = __webpack_require__(549);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pipes_dasherize_pipe__ = __webpack_require__(550);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_component__ = __webpack_require__(537);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__sketch_editor_sketch_editor_component__ = __webpack_require__(354);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__dragdrop_drag_drop_component__ = __webpack_require__(543);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__board_details_board_details_component__ = __webpack_require__(541);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sketch_manager_sketch_manager_component__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_component__ = __webpack_require__(539);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__sketch_editor_sketch_editor_component__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__dragdrop_drag_drop_component__ = __webpack_require__(545);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__board_details_board_details_component__ = __webpack_require__(543);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sketch_manager_sketch_manager_component__ = __webpack_require__(357);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__sketch_sketch_service__ = __webpack_require__(112);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__authentication_authentication_service__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__link_link_service__ = __webpack_require__(351);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__board_board_service__ = __webpack_require__(82);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__link_code_service__ = __webpack_require__(350);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__active_boards_active_boards_component__ = __webpack_require__(535);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__laptop_laptop_component__ = __webpack_require__(349);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__laptop_laptop_input_laptop_input_component__ = __webpack_require__(544);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__laptop_laptop_output_laptop_output_component__ = __webpack_require__(545);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__click_to_edit_click_to_edit_component__ = __webpack_require__(542);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__logs_logs_component__ = __webpack_require__(352);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__marketplace_marketplace_component__ = __webpack_require__(353);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__user_boards_user_boards_component__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__link_link_service__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__board_board_service__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__link_code_service__ = __webpack_require__(352);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__active_boards_active_boards_component__ = __webpack_require__(537);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__laptop_laptop_component__ = __webpack_require__(351);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__laptop_laptop_input_laptop_input_component__ = __webpack_require__(349);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__laptop_laptop_output_laptop_output_component__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__click_to_edit_click_to_edit_component__ = __webpack_require__(544);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__logs_logs_component__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__marketplace_marketplace_component__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__user_boards_user_boards_component__ = __webpack_require__(358);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__authentication_authentication_component__ = __webpack_require__(345);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__home_home_component__ = __webpack_require__(347);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__board_config_pipe__ = __webpack_require__(540);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__board_config_pipe__ = __webpack_require__(542);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__image_service__ = __webpack_require__(348);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2184,7 +2339,7 @@ var AppModule = (function () {
 
 /***/ }),
 
-/***/ 539:
+/***/ 541:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2205,7 +2360,7 @@ var User = (function () {
 
 /***/ }),
 
-/***/ 540:
+/***/ 542:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2250,7 +2405,7 @@ var RealBoardsPipe = (function () {
 
 /***/ }),
 
-/***/ 541:
+/***/ 543:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2258,7 +2413,7 @@ var RealBoardsPipe = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__board_config__ = __webpack_require__(110);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__link_link__ = __webpack_require__(111);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__sketch_sketch__ = __webpack_require__(230);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__link_code_service__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__link_code_service__ = __webpack_require__(352);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BoardDetailsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2356,7 +2511,7 @@ var BoardDetailsComponent = (function () {
 
 /***/ }),
 
-/***/ 542:
+/***/ 544:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2418,14 +2573,14 @@ var ClickToEditComponent = (function () {
 
 /***/ }),
 
-/***/ 543:
+/***/ 545:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__board_board__ = __webpack_require__(346);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__board_board_service__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__board_board_service__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__workspace_canvas__ = __webpack_require__(552);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_config__ = __webpack_require__(110);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sketch_sketch_service__ = __webpack_require__(112);
@@ -2778,133 +2933,6 @@ var DragDropComponent = (function () {
 
 /***/ }),
 
-/***/ 544:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__ = __webpack_require__(119);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environments_environment__ = __webpack_require__(39);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LaptopInputComponent; });
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var LaptopInputComponent = (function () {
-    function LaptopInputComponent(ng2cable, broadcaster) {
-        this.ng2cable = ng2cable;
-        this.broadcaster = broadcaster;
-        this.events = [];
-        this.url = __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* ENV */].apiWs;
-        this.deviceType = 'Input';
-        // private mac: string = `${localStorage.getItem('atrato-user-id')}|${BrowserDetails.getDetails()}|${this.deviceType}`;
-        this.mac = localStorage.getItem('atrato-user-id') + "|LaptopInput";
-        this.events.push("Registering laptop with mac: " + this.mac);
-        this.ng2cable.setCable(this.url);
-    }
-    LaptopInputComponent.prototype.ngOnInit = function () {
-        this.registerToChannel();
-    };
-    LaptopInputComponent.prototype.registerToChannel = function () {
-        this.ng2cable.subscription = this.ng2cable.cable.subscriptions.create({ channel: 'SketchChannel',
-            mac: this.mac, type: this.deviceType, user_id: localStorage.getItem('atrato-user-id') });
-        this.events.push("Started connection with " + this.ng2cable.subscription.consumer.url);
-    };
-    LaptopInputComponent.prototype.triggerInput = function () {
-        this.ng2cable.subscription.perform('blink', { 'mac': this.mac });
-    };
-    LaptopInputComponent.prototype.ngOnDestroy = function () {
-        this.ng2cable.unsubscribe();
-    };
-    LaptopInputComponent = __decorate([
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-laptop-input',
-            template: __webpack_require__(734),
-            styles: [__webpack_require__(714)]
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Broadcaster"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Broadcaster"]) === 'function' && _b) || Object])
-    ], LaptopInputComponent);
-    return LaptopInputComponent;
-    var _a, _b;
-}());
-//# sourceMappingURL=/Users/andrei/Workspace/Dizertatie/PAClient/src/laptop-input.component.js.map
-
-/***/ }),
-
-/***/ 545:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__ = __webpack_require__(119);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environments_environment__ = __webpack_require__(39);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LaptopOutputComponent; });
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var LaptopOutputComponent = (function () {
-    function LaptopOutputComponent(ng2cable) {
-        this.ng2cable = ng2cable;
-        this.events = [];
-        this.url = __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* ENV */].apiWs;
-        this.deviceType = 'Screen';
-        // private mac: string = `${localStorage.getItem('atrato-user-id')}|${BrowserDetails.getDetails()}${this.deviceType}`;
-        this.mac = localStorage.getItem('atrato-user-id') + "|LaptopScreen";
-        this.events.push("Registering laptop with mac: " + this.mac);
-        this.ng2cable.setCable(this.url);
-    }
-    LaptopOutputComponent.prototype.ngOnInit = function () {
-        this.registerToChannel();
-    };
-    LaptopOutputComponent.prototype.registerToChannel = function () {
-        var _this = this;
-        this.ng2cable.subscription = this.ng2cable.cable.subscriptions.create({ channel: 'SketchChannel',
-            mac: this.mac, type: this.deviceType, user_id: localStorage.getItem('atrato-user-id') }, {
-            received: function (data) {
-                var message = data.message;
-                _this.events.push("Received channel message with type: " + message.type);
-                window.open(message.url);
-            }
-        });
-        this.events.push("Started connection with " + this.ng2cable.subscription.consumer.url);
-    };
-    LaptopOutputComponent.prototype.ngOnDestroy = function () {
-        this.ng2cable.unsubscribe();
-    };
-    LaptopOutputComponent = __decorate([
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-laptop-output',
-            template: __webpack_require__(735),
-            styles: [__webpack_require__(715)]
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"]) === 'function' && _a) || Object])
-    ], LaptopOutputComponent);
-    return LaptopOutputComponent;
-    var _a;
-}());
-//# sourceMappingURL=/Users/andrei/Workspace/Dizertatie/PAClient/src/laptop-output.component.js.map
-
-/***/ }),
-
 /***/ 546:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3058,9 +3086,9 @@ var DasherizePipe = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_distinctUntilChanged___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_distinctUntilChanged__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_do__ = __webpack_require__(751);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_do___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_do__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__ = __webpack_require__(396);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__ = __webpack_require__(398);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__ = __webpack_require__(399);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap__ = __webpack_require__(752);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap__);
@@ -3516,7 +3544,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".full-height {\n  height: 90vh;\n  background-color: white; }\n  .full-height button {\n    position: absolute;\n    font-weight: bolder;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    height: 30%;\n    width: 40%;\n    min-width: 200px;\n    margin: auto;\n    font-size: 2rem; }\n", ""]);
 
 // exports
 
@@ -3534,7 +3562,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".full-height {\n  height: 90vh;\n  background-color: white; }\n  .full-height button {\n    position: absolute;\n    font-weight: bolder;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    height: 30%;\n    width: 40%;\n    min-width: 200px;\n    margin: auto;\n    font-size: 2rem;\n    background-color: #025aa5;\n    color: white; }\n", ""]);
 
 // exports
 
@@ -3552,7 +3580,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".full {\n  position: relative;\n  height: 96vh;\n  vertical-align: middle; }\n  .full.left {\n    background-color: #449d44; }\n  .full.right {\n    background-color: #025aa5; }\n  .full span {\n    display: inline-block;\n    font-size: 3rem;\n    font-weight: bolder;\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    width: 15%;\n    height: 10%;\n    margin: auto;\n    color: white; }\n", ""]);
 
 // exports
 
@@ -3704,21 +3732,21 @@ module.exports = "<div class=\"home-container\">\n  <div class=\"row\">\n      <
 /***/ 734:
 /***/ (function(module, exports) {
 
-module.exports = "<button type=\"button\" name=\"button\" class=\"btn btn-secondary\" (click)=\"triggerInput()\">Trigger</button>\n"
+module.exports = "<div class=\"full-height\">\n  <button type=\"button\" name=\"button\" class=\"btn btn-success\" (click)=\"triggerInput()\">PUSH</button>\n</div>\n"
 
 /***/ }),
 
 /***/ 735:
 /***/ (function(module, exports) {
 
-module.exports = "Screen sunt\n"
+module.exports = "<div class=\"full-height\">\n  <button type=\"button\" name=\"button\" class=\"btn btn-primary\">SCREEN</button>\n</div>\n"
 
 /***/ }),
 
 /***/ 736:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-6 col-offset-2\">\n    <ul>\n      <li *ngFor=\"let event of events\">\n        {{event}}\n      </li>\n    </ul>\n  </div>\n</div>\n<div class=\"text-center\">\n  <button type=\"button\" name=\"button\" class=\"btn btn-success\" (click)=\"activateOutput()\">Output</button>\n  <button type=\"button\" name=\"button\" class=\"btn btn-info\" (click)=\"activateInput()\">Input </button>\n</div>\n<div  *ngIf=\"input\" class=\"\">\n  <app-laptop-input></app-laptop-input>\n</div>\n\n<div *ngIf=\"output\">\n  <app-laptop-output></app-laptop-output>\n</div>\n"
+module.exports = "<div class=\"row\">\n  <div class=\"col-6 full left\"  (click)=\"activateInput()\">\n    <span>INPUT</span>\n  </div>\n  <div class=\"col-6 full right\" (click)=\"activateOutput()\">\n    <span>SCREEN</span>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -3732,7 +3760,7 @@ module.exports = "<div *ngIf=\"logs\">\n  <table class=\"table table-striped\">\
 /***/ 738:
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"sketches && boards\" class=\"row\">\n  <div class=\"col-sm-6 offset-sm-3\">\n    <ul class=\"list-group\">\n      <li class=\"list-group-item row\" *ngFor=\"let sketch of sketches\">\n        <div class=\"col-10\">\n          <h3>\n            {{sketch.id}}. {{sketch.name}}\n          </h3>\n          <p class=\"text-muted\">\n            {{sketch.description}}\n          </p>\n          <p>\n            <b>Required Hardware</b>\n            <span *ngFor=\"let board of sketch.getBoardConfigs() | realBoards \" class=\"hardware-req {{hardwareClass(board.type)}}\">\n              {{board.type}}\n            </span>\n          </p>\n          <p class=\"text-right\">\n            Created by: {{sketch.user}}\n          </p>\n          <p class=\"text-muted\" *ngIf=\"!ownAllBoards(sketch)\">\n            You don't own the following required hardware: {{missingBoards(sketch) }}\n          </p>\n          <p class=\"text-muted\" *ngIf=\"mySketch(sketch)\">\n            You already own this sketch\n          </p>\n        </div>\n        <div class=\"col-2\">\n            <button disabled=\"{{canBuySketch(sketch) ? '' : true}}\" class=\"btn btn-info\" (click)=\"buySketch(sketch)\">Buy</button>\n        </div>\n      </li>\n    </ul>\n  </div>\n</div>\n\n<div *ngIf=\"sketches && sketches.length == 0\" class=\"row\">\n  <div class=\"col-sm-6 offset-sm-3\">\n    <p class=\"text-muted text-center\">\n      There are no sketches for sale at the moment..\n    </p>\n  </div>\n</div>\n"
+module.exports = "<script src=\"https://checkout.stripe.com/checkout.js\"></script>\n<div *ngIf=\"sketches && boards\" class=\"row\">\n  <div class=\"col-sm-6 offset-sm-3\">\n    <ul class=\"list-group\">\n      <li class=\"list-group-item row\" *ngFor=\"let sketch of sketches\">\n        <div class=\"col-10\">\n          <h3>\n            {{sketch.id}}. {{sketch.name}}\n          </h3>\n          <p class=\"text-muted\">\n            {{sketch.description}}\n          </p>\n          <p>\n            <b>Required Hardware</b>\n            <span *ngFor=\"let board of sketch.getBoardConfigs() | realBoards \" class=\"hardware-req {{hardwareClass(board.type)}}\">\n              {{board.type}}\n            </span>\n          </p>\n          <p class=\"text-right\">\n            Created by: {{sketch.user}}\n          </p>\n          <p class=\"text-muted\" *ngIf=\"!ownAllBoards(sketch)\">\n            You don't own the following required hardware: {{missingBoards(sketch) }}\n          </p>\n          <p class=\"text-muted\" *ngIf=\"mySketch(sketch)\">\n            You already own this sketch\n          </p>\n        </div>\n        <div *ngIf=\"canBuySketch(sketch)\">\n          <button (click)=\"openCheckout(sketch)\" class=\"btn btn-info\">Buy</button>\n        </div>\n        <div *ngIf=\"!canBuySketch(sketch)\">\n          <button disabled=\"disabled\" class=\"btn btn-info\">Buy</button>\n        </div>\n      </li>\n    </ul>\n  </div>\n</div>\n\n<div *ngIf=\"sketches && sketches.length == 0\" class=\"row\">\n  <div class=\"col-sm-6 offset-sm-3\">\n    <p class=\"text-muted text-center\">\n      There are no sketches for sale at the moment..\n    </p>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -3760,12 +3788,12 @@ module.exports = "<div class=\"user-boards-container\">\n  <div class=\"row\">\n
 /***/ 774:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(415);
+module.exports = __webpack_require__(417);
 
 
 /***/ }),
 
-/***/ 82:
+/***/ 83:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
