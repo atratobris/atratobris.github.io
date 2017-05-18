@@ -66,10 +66,10 @@ var AuthenticationService = (function () {
             var navigationExtras = {
                 queryParams: params,
             };
-            this.router.navigate(['/sketches'], navigationExtras);
+            this.router.navigate(['/home'], navigationExtras);
         }
         else {
-            this.router.navigate(['/sketches']);
+            this.router.navigate(['/home']);
         }
     };
     AuthenticationService.prototype.getCurrentUserId = function () {
@@ -163,6 +163,9 @@ var BoardConfig = (function () {
     };
     BoardConfig.prototype.getSubType = function () {
         return this.subtype;
+    };
+    BoardConfig.prototype.setStatus = function (status) {
+        this.status = status;
     };
     BoardConfig.prototype.nextBoard = function (index) {
         this.mac = "" + this.type + index;
@@ -775,8 +778,8 @@ var AuthenticationComponent = (function () {
     AuthenticationComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-authentication',
-            template: __webpack_require__(729),
-            styles: [__webpack_require__(709)]
+            template: __webpack_require__(730),
+            styles: [__webpack_require__(710)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__authentication_service__["a" /* AuthenticationService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__authentication_service__["a" /* AuthenticationService */]) === 'function' && _a) || Object])
     ], AuthenticationComponent);
@@ -798,10 +801,12 @@ var AuthenticationComponent = (function () {
 
 
 
+var DEFAULT_WIDTH = 160;
+var DEFAULT_HEIGHT = 80;
 var Board = (function () {
     function Board(posXorBoardInterface, posY, width, height, b_config) {
-        this.width = 160;
-        this.height = 80;
+        this.width = DEFAULT_WIDTH;
+        this.height = DEFAULT_HEIGHT;
         // debugger
         this.boardConfig = b_config || new __WEBPACK_IMPORTED_MODULE_1__board_config__["a" /* BoardConfig */]();
         this.offset = new __WEBPACK_IMPORTED_MODULE_0__point__["a" /* Point */](0, 0);
@@ -858,6 +863,9 @@ var Board = (function () {
         ctx.font = textHeight + "px serif";
         ctx.fillText(this.boardConfig.getName(), this.getPosX() - this.width / 2, this.getPosY() - this.height / 2 - 10);
     };
+    Board.prototype.setStatus = function (status) {
+        this.boardConfig.setStatus(status);
+    };
     Board.prototype.getSubType = function () {
         return this.getBoardConfig().getSubType();
     };
@@ -872,16 +880,20 @@ var Board = (function () {
     };
     Board.prototype.shake = function () {
         var _this = this;
-        // this.boardConfig.animate();
-        var initialWidth = this.width;
-        var initialHeight = this.height;
-        var shaking = setInterval(function () {
+        var cancelTheInterval = function () {
+            clearInterval(_this.animationInterval);
+            _this.animationInterval = null;
+            _this.width = DEFAULT_WIDTH;
+            _this.height = DEFAULT_HEIGHT;
+        };
+        if (!!this.animationInterval) {
+            cancelTheInterval();
+        }
+        this.animationInterval = setInterval(function () {
             _this.width += 5;
             _this.height += 5;
-            if (_this.width > initialWidth * 1.5 || _this.height > initialHeight * 2) {
-                clearInterval(shaking);
-                _this.width = initialWidth;
-                _this.height = initialHeight;
+            if (_this.width > DEFAULT_WIDTH * 1.5 || _this.height > DEFAULT_HEIGHT * 2) {
+                cancelTheInterval();
             }
         }, 10);
     };
@@ -975,8 +987,8 @@ var HomeComponent = (function () {
     HomeComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-home',
-            template: __webpack_require__(733),
-            styles: [__webpack_require__(713)]
+            template: __webpack_require__(734),
+            styles: [__webpack_require__(714)]
         }), 
         __metadata('design:paramtypes', [])
     ], HomeComponent);
@@ -1094,8 +1106,8 @@ var LaptopInputComponent = (function () {
     LaptopInputComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-laptop-input',
-            template: __webpack_require__(734),
-            styles: [__webpack_require__(714)]
+            template: __webpack_require__(735),
+            styles: [__webpack_require__(715)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Broadcaster"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Broadcaster"]) === 'function' && _b) || Object])
     ], LaptopInputComponent);
@@ -1159,8 +1171,8 @@ var LaptopOutputComponent = (function () {
     LaptopOutputComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-laptop-output',
-            template: __webpack_require__(735),
-            styles: [__webpack_require__(715)]
+            template: __webpack_require__(736),
+            styles: [__webpack_require__(716)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"]) === 'function' && _a) || Object])
     ], LaptopOutputComponent);
@@ -1206,8 +1218,8 @@ var LaptopComponent = (function () {
     LaptopComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-laptop',
-            template: __webpack_require__(736),
-            styles: [__webpack_require__(716)]
+            template: __webpack_require__(737),
+            styles: [__webpack_require__(717)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === 'function' && _a) || Object])
     ], LaptopComponent);
@@ -1373,8 +1385,8 @@ var LogsComponent = (function () {
     LogsComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-logs',
-            template: __webpack_require__(737),
-            styles: [__webpack_require__(717)]
+            template: __webpack_require__(738),
+            styles: [__webpack_require__(718)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1_ng2_cable_js_index__["Ng2Cable"]) === 'function' && _a) || Object])
     ], LogsComponent);
@@ -1490,8 +1502,8 @@ var MarketplaceComponent = (function () {
     MarketplaceComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-marketplace',
-            template: __webpack_require__(738),
-            styles: [__webpack_require__(718)]
+            template: __webpack_require__(739),
+            styles: [__webpack_require__(719)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__sketch_sketch_service__["a" /* SketchService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__sketch_sketch_service__["a" /* SketchService */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__board_board_service__["a" /* BoardService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__board_board_service__["a" /* BoardService */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__authentication_authentication_service__["a" /* AuthenticationService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__authentication_authentication_service__["a" /* AuthenticationService */]) === 'function' && _c) || Object])
     ], MarketplaceComponent);
@@ -1559,6 +1571,8 @@ var SketchEditorComponent = (function () {
             received: function (data) {
                 _this.activateBoard(data.message.mac);
                 _this.updateMetadata(data.message.metadata, data.message.mac);
+                _this.updateStatus(data.message.status, data.message.mac);
+                console.log(data.message.status);
             }
         });
     };
@@ -1585,6 +1599,11 @@ var SketchEditorComponent = (function () {
     SketchEditorComponent.prototype.stopSketch = function (id) {
         this.sketch.changeStatus('closed');
         this.sketchService.updateStatus(this.sketch);
+    };
+    SketchEditorComponent.prototype.publishToMarket = function (id) {
+        var _this = this;
+        this.sketch.listed = true;
+        this.sketchService.update(this.sketch).then(function (sketch) { return _this.sketch = sketch; });
     };
     SketchEditorComponent.prototype.ngOnDestroy = function () {
         this.ng2cable.unsubscribe();
@@ -1628,6 +1647,13 @@ var SketchEditorComponent = (function () {
         var b = this.sketch.getBoards().find(function (board) { return board.getMac() === mac; });
         if (!!b) {
             b.setMetadata(metadata);
+        }
+    };
+    SketchEditorComponent.prototype.updateStatus = function (status, mac) {
+        var b = this.boards.find(function (board) { return board.getMac() === mac; });
+        if (!!b) {
+            b.setStatus(status);
+            console.log("changed status to " + status);
         }
     };
     SketchEditorComponent.prototype.activateBoard = function (mac) {
@@ -1678,16 +1704,7 @@ var SketchEditorComponent = (function () {
         delete this.operationMode;
     };
     SketchEditorComponent.prototype.onLinkSave = function (link) {
-        var links = this.sketch.getLinks();
-        for (var _i = 0, links_1 = links; _i < links_1.length; _i++) {
-            var l = links_1[_i];
-            if (link['to'] === l['to'] && link['from'] === l['from']) {
-                l.setLogic(link.logic);
-                break;
-            }
-        }
-        this.sketchService.updateLinks(this.sketch, links);
-        this.onLinkDeselected();
+        this.sketch.changed();
     };
     SketchEditorComponent.prototype.onBoardSave = function (b) {
         this.boardService.update(b);
@@ -1736,8 +1753,8 @@ var SketchEditorComponent = (function () {
     SketchEditorComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-sketch-editor',
-            template: __webpack_require__(739),
-            styles: [__webpack_require__(719)]
+            template: __webpack_require__(740),
+            styles: [__webpack_require__(720)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5_ng2_cable_js_index__["Ng2Cable"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_5_ng2_cable_js_index__["Ng2Cable"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__board_board_service__["a" /* BoardService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__board_board_service__["a" /* BoardService */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__sketch_sketch_service__["a" /* SketchService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__sketch_sketch_service__["a" /* SketchService */]) === 'function' && _d) || Object, (typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1__link_link_service__["a" /* LinkService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__link_link_service__["a" /* LinkService */]) === 'function' && _e) || Object, (typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* ActivatedRoute */]) === 'function' && _f) || Object, (typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === 'function' && _g) || Object])
     ], SketchEditorComponent);
@@ -1833,11 +1850,12 @@ var SketchManagerComponent = (function () {
         this.router.navigate(['/dashboard'], navigationExtras);
         this.selectedSketch = this.sketches[id];
     };
-    SketchManagerComponent.prototype.onNameUpdated = function (newName) {
+    SketchManagerComponent.prototype.onNameUpdated = function (idx, newName) {
         var _this = this;
-        this.selectedSketch.setName(newName);
-        this.sketchService.update(this.selectedSketch).then(function (sketch) {
-            _this.selectedSketch = sketch;
+        var sketch = this.sketches[idx];
+        sketch.setName(newName);
+        this.sketchService.update(sketch).then(function (s) {
+            _this.selectedSketch = s;
         });
     };
     SketchManagerComponent.prototype.newSketch = function () {
@@ -1887,8 +1905,8 @@ var SketchManagerComponent = (function () {
     SketchManagerComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-sketch-manager',
-            template: __webpack_require__(740),
-            styles: [__webpack_require__(720)]
+            template: __webpack_require__(741),
+            styles: [__webpack_require__(721)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__sketch_sketch_service__["a" /* SketchService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__sketch_sketch_service__["a" /* SketchService */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === 'function' && _d) || Object])
     ], SketchManagerComponent);
@@ -1943,8 +1961,8 @@ var UserBoardsComponent = (function () {
     UserBoardsComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-user-boards',
-            template: __webpack_require__(741),
-            styles: [__webpack_require__(721)]
+            template: __webpack_require__(742),
+            styles: [__webpack_require__(722)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__board_board_service__["a" /* BoardService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__board_board_service__["a" /* BoardService */]) === 'function' && _a) || Object])
     ], UserBoardsComponent);
@@ -1989,7 +2007,7 @@ webpackEmptyContext.id = 416;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills_ts__ = __webpack_require__(553);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills_ts__ = __webpack_require__(554);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(507);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(39);
@@ -2091,8 +2109,8 @@ var ActiveBoardsComponent = (function () {
     ActiveBoardsComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-active-boards',
-            template: __webpack_require__(727),
-            styles: [__webpack_require__(707)]
+            template: __webpack_require__(728),
+            styles: [__webpack_require__(708)]
         }), 
         __metadata('design:paramtypes', [(typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__board_board_service__["a" /* BoardService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__board_board_service__["a" /* BoardService */]) === 'function' && _b) || Object])
     ], ActiveBoardsComponent);
@@ -2144,7 +2162,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var routes = [
-    { path: '', redirectTo: '/authentication', pathMatch: 'full' },
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: __WEBPACK_IMPORTED_MODULE_11__home_home_component__["a" /* HomeComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_12__authentication_authentication_service__["a" /* AuthenticationService */]] },
     { path: 'authentication', component: __WEBPACK_IMPORTED_MODULE_10__authentication_authentication_component__["a" /* AuthenticationComponent */] },
     { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_3__sketch_editor_sketch_editor_component__["a" /* SketchEditorComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_12__authentication_authentication_service__["a" /* AuthenticationService */]] },
@@ -2207,8 +2225,8 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-root',
-            template: __webpack_require__(728),
-            styles: [__webpack_require__(708)]
+            template: __webpack_require__(729),
+            styles: [__webpack_require__(709)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__authentication_authentication_service__["a" /* AuthenticationService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__authentication_authentication_service__["a" /* AuthenticationService */]) === 'function' && _a) || Object])
     ], AppComponent);
@@ -2223,7 +2241,7 @@ var AppComponent = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__rxjs_extensions__ = __webpack_require__(551);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__rxjs_extensions__ = __webpack_require__(552);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index__ = __webpack_require__(119);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index__);
@@ -2233,28 +2251,29 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_routing_module__ = __webpack_require__(538);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pipes_capitalize_pipe__ = __webpack_require__(549);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pipes_dasherize_pipe__ = __webpack_require__(550);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_component__ = __webpack_require__(539);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__sketch_editor_sketch_editor_component__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__dragdrop_drag_drop_component__ = __webpack_require__(545);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__board_details_board_details_component__ = __webpack_require__(543);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sketch_manager_sketch_manager_component__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__sketch_sketch_service__ = __webpack_require__(112);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__authentication_authentication_service__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__link_link_service__ = __webpack_require__(353);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__board_board_service__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__link_code_service__ = __webpack_require__(352);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__active_boards_active_boards_component__ = __webpack_require__(537);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__laptop_laptop_component__ = __webpack_require__(351);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__laptop_laptop_input_laptop_input_component__ = __webpack_require__(349);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__laptop_laptop_output_laptop_output_component__ = __webpack_require__(350);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__click_to_edit_click_to_edit_component__ = __webpack_require__(544);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__logs_logs_component__ = __webpack_require__(354);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__marketplace_marketplace_component__ = __webpack_require__(355);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__user_boards_user_boards_component__ = __webpack_require__(358);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__authentication_authentication_component__ = __webpack_require__(345);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__home_home_component__ = __webpack_require__(347);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__board_config_pipe__ = __webpack_require__(542);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__image_service__ = __webpack_require__(348);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pipes_truncate_pipe__ = __webpack_require__(551);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_component__ = __webpack_require__(539);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sketch_editor_sketch_editor_component__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__dragdrop_drag_drop_component__ = __webpack_require__(545);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__board_details_board_details_component__ = __webpack_require__(543);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__sketch_manager_sketch_manager_component__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__sketch_sketch_service__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__authentication_authentication_service__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__link_link_service__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__board_board_service__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__link_code_service__ = __webpack_require__(352);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__active_boards_active_boards_component__ = __webpack_require__(537);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__laptop_laptop_component__ = __webpack_require__(351);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__laptop_laptop_input_laptop_input_component__ = __webpack_require__(349);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__laptop_laptop_output_laptop_output_component__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__click_to_edit_click_to_edit_component__ = __webpack_require__(544);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__logs_logs_component__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__marketplace_marketplace_component__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__user_boards_user_boards_component__ = __webpack_require__(358);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__authentication_authentication_component__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__home_home_component__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__board_config_pipe__ = __webpack_require__(542);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__image_service__ = __webpack_require__(348);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2296,31 +2315,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_9__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_10__sketch_editor_sketch_editor_component__["a" /* SketchEditorComponent */],
-                __WEBPACK_IMPORTED_MODULE_11__dragdrop_drag_drop_component__["a" /* DragDropComponent */],
-                __WEBPACK_IMPORTED_MODULE_12__board_details_board_details_component__["a" /* BoardDetailsComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__sketch_manager_sketch_manager_component__["a" /* SketchManagerComponent */],
-                __WEBPACK_IMPORTED_MODULE_19__active_boards_active_boards_component__["a" /* ActiveBoardsComponent */],
-                __WEBPACK_IMPORTED_MODULE_20__laptop_laptop_component__["a" /* LaptopComponent */],
-                __WEBPACK_IMPORTED_MODULE_21__laptop_laptop_input_laptop_input_component__["a" /* LaptopInputComponent */],
-                __WEBPACK_IMPORTED_MODULE_22__laptop_laptop_output_laptop_output_component__["a" /* LaptopOutputComponent */],
-                __WEBPACK_IMPORTED_MODULE_23__click_to_edit_click_to_edit_component__["a" /* ClickToEditComponent */],
-                __WEBPACK_IMPORTED_MODULE_24__logs_logs_component__["a" /* LogsComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__app_component__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__sketch_editor_sketch_editor_component__["a" /* SketchEditorComponent */],
+                __WEBPACK_IMPORTED_MODULE_12__dragdrop_drag_drop_component__["a" /* DragDropComponent */],
+                __WEBPACK_IMPORTED_MODULE_13__board_details_board_details_component__["a" /* BoardDetailsComponent */],
+                __WEBPACK_IMPORTED_MODULE_14__sketch_manager_sketch_manager_component__["a" /* SketchManagerComponent */],
+                __WEBPACK_IMPORTED_MODULE_20__active_boards_active_boards_component__["a" /* ActiveBoardsComponent */],
+                __WEBPACK_IMPORTED_MODULE_21__laptop_laptop_component__["a" /* LaptopComponent */],
+                __WEBPACK_IMPORTED_MODULE_22__laptop_laptop_input_laptop_input_component__["a" /* LaptopInputComponent */],
+                __WEBPACK_IMPORTED_MODULE_23__laptop_laptop_output_laptop_output_component__["a" /* LaptopOutputComponent */],
+                __WEBPACK_IMPORTED_MODULE_24__click_to_edit_click_to_edit_component__["a" /* ClickToEditComponent */],
+                __WEBPACK_IMPORTED_MODULE_25__logs_logs_component__["a" /* LogsComponent */],
                 __WEBPACK_IMPORTED_MODULE_7__pipes_capitalize_pipe__["a" /* CapitalizePipe */],
                 __WEBPACK_IMPORTED_MODULE_8__pipes_dasherize_pipe__["a" /* DasherizePipe */],
-                __WEBPACK_IMPORTED_MODULE_25__marketplace_marketplace_component__["a" /* MarketplaceComponent */],
-                __WEBPACK_IMPORTED_MODULE_26__user_boards_user_boards_component__["a" /* UserBoardsComponent */],
-                __WEBPACK_IMPORTED_MODULE_27__authentication_authentication_component__["a" /* AuthenticationComponent */],
-                __WEBPACK_IMPORTED_MODULE_29__board_config_pipe__["a" /* VirtualBoardsPipe */],
-                __WEBPACK_IMPORTED_MODULE_29__board_config_pipe__["b" /* RealBoardsPipe */],
-                __WEBPACK_IMPORTED_MODULE_28__home_home_component__["a" /* HomeComponent */]
+                __WEBPACK_IMPORTED_MODULE_9__pipes_truncate_pipe__["a" /* TruncatePipe */],
+                __WEBPACK_IMPORTED_MODULE_26__marketplace_marketplace_component__["a" /* MarketplaceComponent */],
+                __WEBPACK_IMPORTED_MODULE_27__user_boards_user_boards_component__["a" /* UserBoardsComponent */],
+                __WEBPACK_IMPORTED_MODULE_28__authentication_authentication_component__["a" /* AuthenticationComponent */],
+                __WEBPACK_IMPORTED_MODULE_30__board_config_pipe__["a" /* VirtualBoardsPipe */],
+                __WEBPACK_IMPORTED_MODULE_30__board_config_pipe__["b" /* RealBoardsPipe */],
+                __WEBPACK_IMPORTED_MODULE_29__home_home_component__["a" /* HomeComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
@@ -2328,8 +2349,8 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* HttpModule */],
                 __WEBPACK_IMPORTED_MODULE_6__app_routing_module__["a" /* AppRoutingModule */]
             ],
-            providers: [__WEBPACK_IMPORTED_MODULE_14__sketch_sketch_service__["a" /* SketchService */], __WEBPACK_IMPORTED_MODULE_17__board_board_service__["a" /* BoardService */], __WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index__["Ng2Cable"], __WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index__["Broadcaster"], __WEBPACK_IMPORTED_MODULE_16__link_link_service__["a" /* LinkService */], __WEBPACK_IMPORTED_MODULE_15__authentication_authentication_service__["a" /* AuthenticationService */], __WEBPACK_IMPORTED_MODULE_18__link_code_service__["a" /* CodeService */], __WEBPACK_IMPORTED_MODULE_30__image_service__["a" /* ImageService */]],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_9__app_component__["a" /* AppComponent */]]
+            providers: [__WEBPACK_IMPORTED_MODULE_15__sketch_sketch_service__["a" /* SketchService */], __WEBPACK_IMPORTED_MODULE_18__board_board_service__["a" /* BoardService */], __WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index__["Ng2Cable"], __WEBPACK_IMPORTED_MODULE_2_ng2_cable_js_index__["Broadcaster"], __WEBPACK_IMPORTED_MODULE_17__link_link_service__["a" /* LinkService */], __WEBPACK_IMPORTED_MODULE_16__authentication_authentication_service__["a" /* AuthenticationService */], __WEBPACK_IMPORTED_MODULE_19__link_code_service__["a" /* CodeService */], __WEBPACK_IMPORTED_MODULE_31__image_service__["a" /* ImageService */]],
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_10__app_component__["a" /* AppComponent */]]
         }), 
         __metadata('design:paramtypes', [])
     ], AppModule);
@@ -2434,6 +2455,7 @@ var BoardDetailsComponent = (function () {
         this.codeService = codeService;
         this.onBoardSave = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         this.onLinkSave = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.showCode = false;
     }
     BoardDetailsComponent.prototype.ngOnInit = function () {
     };
@@ -2464,6 +2486,9 @@ var BoardDetailsComponent = (function () {
         return '';
     };
     BoardDetailsComponent.prototype.trigger = function () {
+    };
+    BoardDetailsComponent.prototype.toggle = function () {
+        this.showCode = !this.showCode;
     };
     BoardDetailsComponent.prototype.linkTypes = function (link) {
         return link
@@ -2499,8 +2524,8 @@ var BoardDetailsComponent = (function () {
     BoardDetailsComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-board-details',
-            template: __webpack_require__(730),
-            styles: [__webpack_require__(710)]
+            template: __webpack_require__(731),
+            styles: [__webpack_require__(711)]
         }), 
         __metadata('design:paramtypes', [(typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__link_code_service__["a" /* CodeService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__link_code_service__["a" /* CodeService */]) === 'function' && _d) || Object])
     ], BoardDetailsComponent);
@@ -2562,8 +2587,8 @@ var ClickToEditComponent = (function () {
     ClickToEditComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-click-to-edit',
-            template: __webpack_require__(731),
-            styles: [__webpack_require__(711)]
+            template: __webpack_require__(732),
+            styles: [__webpack_require__(712)]
         }), 
         __metadata('design:paramtypes', [])
     ], ClickToEditComponent);
@@ -2581,7 +2606,7 @@ var ClickToEditComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__board_board__ = __webpack_require__(346);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__board_board_service__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__workspace_canvas__ = __webpack_require__(552);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__workspace_canvas__ = __webpack_require__(553);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_config__ = __webpack_require__(110);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sketch_sketch_service__ = __webpack_require__(112);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sketch_sketch__ = __webpack_require__(230);
@@ -2920,8 +2945,8 @@ var DragDropComponent = (function () {
     DragDropComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-drag-drop',
-            template: __webpack_require__(732),
-            styles: [__webpack_require__(712)],
+            template: __webpack_require__(733),
+            styles: [__webpack_require__(713)],
             encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None,
         }), 
         __metadata('design:paramtypes', [(typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"]) === 'function' && _e) || Object, (typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_6__sketch_sketch_service__["a" /* SketchService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_6__sketch_sketch_service__["a" /* SketchService */]) === 'function' && _f) || Object, (typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _g) || Object, (typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_3__board_board_service__["a" /* BoardService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__board_board_service__["a" /* BoardService */]) === 'function' && _h) || Object])
@@ -3074,23 +3099,61 @@ var DasherizePipe = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_of__ = __webpack_require__(746);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TruncatePipe; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var TruncatePipe = (function () {
+    function TruncatePipe() {
+    }
+    TruncatePipe.prototype.transform = function (value) {
+        var length = 18;
+        if (value.length > length) {
+            return value.substring(0, length) + "...";
+        }
+        return value;
+    };
+    TruncatePipe = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
+            name: 'truncate'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], TruncatePipe);
+    return TruncatePipe;
+}());
+//# sourceMappingURL=/Users/andrei/Workspace/Dizertatie/PAClient/src/truncate.pipe.js.map
+
+/***/ }),
+
+/***/ 552:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_of__ = __webpack_require__(747);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_of__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_observable_throw__ = __webpack_require__(747);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_observable_throw__ = __webpack_require__(748);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_observable_throw___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_add_observable_throw__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__ = __webpack_require__(748);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__ = __webpack_require__(749);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_debounceTime__ = __webpack_require__(749);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_debounceTime__ = __webpack_require__(750);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_debounceTime___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_debounceTime__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_distinctUntilChanged__ = __webpack_require__(750);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_distinctUntilChanged__ = __webpack_require__(751);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_distinctUntilChanged___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_distinctUntilChanged__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_do__ = __webpack_require__(751);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_do__ = __webpack_require__(752);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_do___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_do__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__ = __webpack_require__(398);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__ = __webpack_require__(399);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap__ = __webpack_require__(752);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap__ = __webpack_require__(753);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap__);
 
 
@@ -3105,7 +3168,7 @@ var DasherizePipe = (function () {
 
 /***/ }),
 
-/***/ 552:
+/***/ 553:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3354,41 +3417,41 @@ var WorkspaceCanvas = (function () {
 
 /***/ }),
 
-/***/ 553:
+/***/ 554:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_es6_symbol__ = __webpack_require__(568);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_es6_symbol__ = __webpack_require__(569);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_es6_symbol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_core_js_es6_symbol__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_core_js_es6_object__ = __webpack_require__(561);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_core_js_es6_object__ = __webpack_require__(562);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_core_js_es6_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_core_js_es6_object__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_core_js_es6_function__ = __webpack_require__(557);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_core_js_es6_function__ = __webpack_require__(558);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_core_js_es6_function___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_core_js_es6_function__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_core_js_es6_parse_int__ = __webpack_require__(563);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_core_js_es6_parse_int__ = __webpack_require__(564);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_core_js_es6_parse_int___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_core_js_es6_parse_int__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_core_js_es6_parse_float__ = __webpack_require__(562);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_core_js_es6_parse_float__ = __webpack_require__(563);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_core_js_es6_parse_float___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_core_js_es6_parse_float__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_core_js_es6_number__ = __webpack_require__(560);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_core_js_es6_number__ = __webpack_require__(561);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_core_js_es6_number___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_core_js_es6_number__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_core_js_es6_math__ = __webpack_require__(559);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_core_js_es6_math__ = __webpack_require__(560);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_core_js_es6_math___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_core_js_es6_math__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_core_js_es6_string__ = __webpack_require__(567);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_core_js_es6_string__ = __webpack_require__(568);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_core_js_es6_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_core_js_es6_string__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_core_js_es6_date__ = __webpack_require__(556);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_core_js_es6_date__ = __webpack_require__(557);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_core_js_es6_date___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_core_js_es6_date__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_core_js_es6_array__ = __webpack_require__(555);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_core_js_es6_array__ = __webpack_require__(556);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_core_js_es6_array___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_core_js_es6_array__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_core_js_es6_regexp__ = __webpack_require__(565);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_core_js_es6_regexp__ = __webpack_require__(566);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_core_js_es6_regexp___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_core_js_es6_regexp__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_core_js_es6_map__ = __webpack_require__(558);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_core_js_es6_map__ = __webpack_require__(559);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_core_js_es6_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_core_js_es6_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_core_js_es6_set__ = __webpack_require__(566);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_core_js_es6_set__ = __webpack_require__(567);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_core_js_es6_set___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_core_js_es6_set__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_core_js_es6_reflect__ = __webpack_require__(564);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_core_js_es6_reflect__ = __webpack_require__(565);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_core_js_es6_reflect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13_core_js_es6_reflect__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_core_js_es7_reflect__ = __webpack_require__(569);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_core_js_es7_reflect__ = __webpack_require__(570);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_core_js_es7_reflect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14_core_js_es7_reflect__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_zone_js_dist_zone__ = __webpack_require__(772);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_zone_js_dist_zone__ = __webpack_require__(773);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_zone_js_dist_zone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_zone_js_dist_zone__);
 
 
@@ -3410,24 +3473,6 @@ var WorkspaceCanvas = (function () {
 
 /***/ }),
 
-/***/ 707:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(16)();
-// imports
-
-
-// module
-exports.push([module.i, ".active-boards-container {\n  max-height: 700px;\n  overflow-y: scroll; }\n\n.board {\n  border: 4px solid white;\n  border-radius: 10px;\n  padding: 5px 8px;\n  margin: 0 5px 25px 0; }\n  .board.selected {\n    border: 4px solid black; }\n  .board.used {\n    opacity: 0.5; }\n\n.text-right {\n  text-align: right; }\n\n.offline {\n  color: #b71c1c; }\n\n.online {\n  color: #1b5e20; }\n\np {\n  margin-bottom: 5px; }\n\n.activity {\n  font-size: 11px; }\n\n.mac {\n  word-wrap: break-word;\n  font-size: 13px; }\n\napp-click-to-edit {\n  display: inline-block; }\n\n.board {\n  -ms-user-select: none;\n      user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none; }\n  .board.animate {\n    -webkit-animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;\n            animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;\n    -webkit-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0);\n    -webkit-backface-visibility: hidden;\n            backface-visibility: hidden;\n    -webkit-perspective: 1000px;\n            perspective: 1000px; }\n    .board.animate.used {\n      -webkit-animation: none;\n              animation: none; }\n\n@-webkit-keyframes shake {\n  10%, 90% {\n    -webkit-transform: translate3d(-1px, 0, 0);\n            transform: translate3d(-1px, 0, 0); }\n  20%, 80% {\n    -webkit-transform: translate3d(2px, 0, 0);\n            transform: translate3d(2px, 0, 0); }\n  30%, 50%, 70% {\n    -webkit-transform: translate3d(-4px, 0, 0);\n            transform: translate3d(-4px, 0, 0); }\n  40%, 60% {\n    -webkit-transform: translate3d(4px, 0, 0);\n            transform: translate3d(4px, 0, 0); } }\n\n@keyframes shake {\n  10%, 90% {\n    -webkit-transform: translate3d(-1px, 0, 0);\n            transform: translate3d(-1px, 0, 0); }\n  20%, 80% {\n    -webkit-transform: translate3d(2px, 0, 0);\n            transform: translate3d(2px, 0, 0); }\n  30%, 50%, 70% {\n    -webkit-transform: translate3d(-4px, 0, 0);\n            transform: translate3d(-4px, 0, 0); }\n  40%, 60% {\n    -webkit-transform: translate3d(4px, 0, 0);\n            transform: translate3d(4px, 0, 0); } }\n", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
 /***/ 708:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3436,7 +3481,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".box-size-proper {\n  background-color: black; }\n\n.navigation a {\n  cursor: pointer; }\n\n.navigation .auth {\n  margin-left: 30%; }\n\n.navigation .nav-item a {\n  display: block;\n  padding: .5em 1em;\n  border: 1px solid transparent;\n  border-top-right-radius: .25rem;\n  border-top-left-radius: .25rem; }\n  .navigation .nav-item a.active {\n    color: #464a4c;\n    background-color: #fff;\n    border-color: #ddd #ddd #fff; }\n  .navigation .nav-item a.username {\n    color: gray;\n    font-size: 16px;\n    cursor: default; }\n\n.navigation a:not([href]):not([tabindex]) {\n  color: #0275d8;\n  text-decoration: none; }\n", ""]);
+exports.push([module.i, ".active-boards-container {\n  max-height: 700px;\n  overflow-y: scroll; }\n\n.board {\n  border: 4px solid white;\n  border-radius: 10px;\n  padding: 5px 8px;\n  margin: 0 5px 5px 0; }\n  .board.selected {\n    border: 4px solid black; }\n  .board.used {\n    opacity: 0.5; }\n\n.text-right {\n  text-align: right; }\n\n.offline {\n  color: #b71c1c; }\n\n.online {\n  color: #1b5e20; }\n\np {\n  margin-bottom: 5px; }\n\n.activity {\n  font-size: 11px; }\n\n.mac {\n  word-wrap: break-word;\n  font-size: 13px; }\n\napp-click-to-edit {\n  display: inline-block; }\n\n.board {\n  -ms-user-select: none;\n      user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none; }\n  .board.animate {\n    -webkit-animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;\n            animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;\n    -webkit-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0);\n    -webkit-backface-visibility: hidden;\n            backface-visibility: hidden;\n    -webkit-perspective: 1000px;\n            perspective: 1000px; }\n    .board.animate.used {\n      -webkit-animation: none;\n              animation: none; }\n\n@-webkit-keyframes shake {\n  10%, 90% {\n    -webkit-transform: translate3d(-1px, 0, 0);\n            transform: translate3d(-1px, 0, 0); }\n  20%, 80% {\n    -webkit-transform: translate3d(2px, 0, 0);\n            transform: translate3d(2px, 0, 0); }\n  30%, 50%, 70% {\n    -webkit-transform: translate3d(-4px, 0, 0);\n            transform: translate3d(-4px, 0, 0); }\n  40%, 60% {\n    -webkit-transform: translate3d(4px, 0, 0);\n            transform: translate3d(4px, 0, 0); } }\n\n@keyframes shake {\n  10%, 90% {\n    -webkit-transform: translate3d(-1px, 0, 0);\n            transform: translate3d(-1px, 0, 0); }\n  20%, 80% {\n    -webkit-transform: translate3d(2px, 0, 0);\n            transform: translate3d(2px, 0, 0); }\n  30%, 50%, 70% {\n    -webkit-transform: translate3d(-4px, 0, 0);\n            transform: translate3d(-4px, 0, 0); }\n  40%, 60% {\n    -webkit-transform: translate3d(4px, 0, 0);\n            transform: translate3d(4px, 0, 0); } }\n", ""]);
 
 // exports
 
@@ -3454,7 +3499,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".box-size-proper {\n  background-color: black; }\n\n.navigation a {\n  cursor: pointer; }\n\n.navigation .auth {\n  margin-left: 30%; }\n\n.navigation .nav-item a {\n  display: block;\n  padding: .5em 1em;\n  border: 1px solid transparent;\n  border-top-right-radius: .25rem;\n  border-top-left-radius: .25rem; }\n  .navigation .nav-item a.active {\n    color: #464a4c;\n    background-color: #fff;\n    border-color: #ddd #ddd #fff; }\n  .navigation .nav-item a.username {\n    color: gray;\n    font-size: 16px;\n    cursor: default; }\n\n.navigation a:not([href]):not([tabindex]) {\n  color: #0275d8;\n  text-decoration: none; }\n", ""]);
 
 // exports
 
@@ -3472,7 +3517,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".details {\n  background-color: #e0e0e0;\n  padding: 10px 25px; }\n\n.btn.full {\n  width: 100%;\n  text-align: center; }\n", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
@@ -3490,7 +3535,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".edit-form {\n  margin-bottom: 10px; }\n\nbutton:focus {\n  outline: 0;\n  cursor: pointer; }\n\n.read-only {\n  cursor: pointer; }\n", ""]);
+exports.push([module.i, ".details {\n  background-color: #e0e0e0;\n  padding: 10px 25px; }\n\n.btn.full {\n  width: 100%;\n  text-align: center; }\n", ""]);
 
 // exports
 
@@ -3508,7 +3553,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".gu-mirror {\n  position: fixed !important;\n  margin: 0 !important;\n  z-index: 9999 !important;\n  opacity: 0.8;\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)\";\n  filter: alpha(opacity=80); }\n\n.gu-hide {\n  display: none !important; }\n\n.gu-unselectable {\n  -webkit-user-select: none !important;\n  -moz-user-select: none !important;\n  -ms-user-select: none !important;\n  user-select: none !important; }\n\n.gu-transit {\n  opacity: 0.2;\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)\";\n  filter: alpha(opacity=20); }\n\n.container.source {\n  background-color: red; }\n\n.container.target {\n  background-color: blue;\n  min-height: 100px; }\n\n.menu, .workspace {\n  border: 1px solid black;\n  min-height: 400px; }\n\ncanvas {\n  border: 1px solid black;\n  width: 100%;\n  -ms-user-select: none;\n      user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none; }\n\n.sixteen-nine {\n  position: relative;\n  width: 100%;\n  max-width: 990px;\n  margin: 0 auto; }\n  .sixteen-nine:before {\n    display: block;\n    content: \"\";\n    width: 100%;\n    padding-top: 56.25%; }\n  .sixteen-nine > .canvas {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0; }\n\n.draggable {\n  cursor: -webkit-grab;\n  cursor: grab; }\n\n.dragging {\n  cursor: -webkit-grabbing;\n  cursor: grabbing; }\n", ""]);
+exports.push([module.i, ".edit-form {\n  margin-bottom: 10px; }\n\nbutton:focus {\n  outline: 0;\n  cursor: pointer; }\n\n.read-only {\n  cursor: pointer; }\n", ""]);
 
 // exports
 
@@ -3526,7 +3571,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".home-container {\n  margin-top: 3rem; }\n\nul.pages {\n  list-style-type: none;\n  padding: 0 15%; }\n  ul.pages li {\n    padding-top: 10px;\n    padding-bottom: 10px; }\n", ""]);
+exports.push([module.i, ".gu-mirror {\n  position: fixed !important;\n  margin: 0 !important;\n  z-index: 9999 !important;\n  opacity: 0.8;\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)\";\n  filter: alpha(opacity=80); }\n\n.gu-hide {\n  display: none !important; }\n\n.gu-unselectable {\n  -webkit-user-select: none !important;\n  -moz-user-select: none !important;\n  -ms-user-select: none !important;\n  user-select: none !important; }\n\n.gu-transit {\n  opacity: 0.2;\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)\";\n  filter: alpha(opacity=20); }\n\n.container.source {\n  background-color: red; }\n\n.container.target {\n  background-color: blue;\n  min-height: 100px; }\n\n.menu, .workspace {\n  border: 1px solid black;\n  min-height: 400px; }\n\ncanvas {\n  border: 1px solid black;\n  width: 100%;\n  -ms-user-select: none;\n      user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none; }\n\n.sixteen-nine {\n  position: relative;\n  width: 100%;\n  margin: 0 auto; }\n  .sixteen-nine:before {\n    display: block;\n    content: \"\";\n    width: 100%;\n    padding-top: 56.25%; }\n  .sixteen-nine > .canvas {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0; }\n\n.draggable {\n  cursor: -webkit-grab;\n  cursor: grab; }\n\n.dragging {\n  cursor: -webkit-grabbing;\n  cursor: grabbing; }\n", ""]);
 
 // exports
 
@@ -3544,7 +3589,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".full-height {\n  height: 90vh;\n  background-color: white; }\n  .full-height button {\n    position: absolute;\n    font-weight: bolder;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    height: 30%;\n    width: 40%;\n    min-width: 200px;\n    margin: auto;\n    font-size: 2rem; }\n", ""]);
+exports.push([module.i, ".home-container {\n  margin-top: 3rem; }\n\nul.pages {\n  list-style-type: none;\n  padding: 0 15%; }\n  ul.pages li {\n    padding-top: 10px;\n    padding-bottom: 10px; }\n", ""]);
 
 // exports
 
@@ -3562,7 +3607,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".full-height {\n  height: 90vh;\n  background-color: white; }\n  .full-height button {\n    position: absolute;\n    font-weight: bolder;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    height: 30%;\n    width: 40%;\n    min-width: 200px;\n    margin: auto;\n    font-size: 2rem;\n    background-color: #025aa5;\n    color: white; }\n", ""]);
+exports.push([module.i, ".full-height {\n  height: 90vh;\n  background-color: white; }\n  .full-height button {\n    position: absolute;\n    font-weight: bolder;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    height: 30%;\n    width: 40%;\n    min-width: 200px;\n    margin: auto;\n    font-size: 2rem; }\n", ""]);
 
 // exports
 
@@ -3580,7 +3625,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".full {\n  position: relative;\n  height: 96vh;\n  vertical-align: middle; }\n  .full.left {\n    background-color: #449d44; }\n  .full.right {\n    background-color: #025aa5; }\n  .full span {\n    display: inline-block;\n    font-size: 3rem;\n    font-weight: bolder;\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    width: 15%;\n    height: 10%;\n    margin: auto;\n    color: white; }\n", ""]);
+exports.push([module.i, ".full-height {\n  height: 90vh;\n  background-color: white; }\n  .full-height button {\n    position: absolute;\n    font-weight: bolder;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    height: 30%;\n    width: 40%;\n    min-width: 200px;\n    margin: auto;\n    font-size: 2rem;\n    background-color: #025aa5;\n    color: white; }\n", ""]);
 
 // exports
 
@@ -3598,7 +3643,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".log .connected {\n  color: #4caf50; }\n\n.log .disconnected {\n  color: #9e9e9e; }\n\n.log .error {\n  color: #f44336; }\n\n.log .output-sent {\n  color: #2196f3; }\n\n.log .input-received {\n  color: #ff9800; }\n\n.log .register {\n  color: #1b5e20; }\n", ""]);
+exports.push([module.i, ".full {\n  position: relative;\n  height: 96vh;\n  vertical-align: middle; }\n  .full.left {\n    background-color: #449d44; }\n  .full.right {\n    background-color: #025aa5; }\n  .full span {\n    display: inline-block;\n    font-size: 3rem;\n    font-weight: bolder;\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    width: 15%;\n    height: 10%;\n    margin: auto;\n    color: white; }\n", ""]);
 
 // exports
 
@@ -3616,7 +3661,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, "h3, p {\n  display: block;\n  width: 100%; }\n\n.hardware-req {\n  padding: 5px 10px;\n  border-radius: 10px;\n  margin-right: 5px; }\n  .hardware-req.owned {\n    background-color: #81c784; }\n  .hardware-req.not-owned {\n    background-color: #e57373; }\n", ""]);
+exports.push([module.i, ".log .connected {\n  color: #4caf50; }\n\n.log .disconnected {\n  color: #9e9e9e; }\n\n.log .error {\n  color: #f44336; }\n\n.log .output-sent {\n  color: #2196f3; }\n\n.log .input-received {\n  color: #ff9800; }\n\n.log .register {\n  color: #1b5e20; }\n", ""]);
 
 // exports
 
@@ -3634,7 +3679,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, ".btn-group .btn {\n  border: 3px solid white; }\n  .btn-group .btn.full {\n    width: 100%; }\n  .btn-group .btn.half {\n    width: 49%; }\n  .btn-group .btn.selected {\n    border: 3px solid black; }\n\n.commands-wrapper {\n  width: 100%; }\n  .commands-wrapper .description {\n    margin-left: 1rem; }\n\n.status-button {\n  text-align: center;\n  border: 4px solid white;\n  border-radius: 10px; }\n  .status-button .btn {\n    color: white;\n    font-weight: bold;\n    padding: 15px 45px; }\n    .status-button .btn.closed {\n      background-color: #81c784; }\n      .status-button .btn.closed.selected {\n        border: 4px solid #1b5e20; }\n    .status-button .btn.active {\n      background-color: #e57373; }\n      .status-button .btn.active.selected {\n        border: 4px solid #b71c1c; }\n\napp-click-to-edit {\n  display: inline-block; }\n", ""]);
+exports.push([module.i, ".hardware-req {\n  padding: 5px 10px;\n  border-radius: 10px;\n  margin-right: 5px; }\n  .hardware-req.owned {\n    background-color: #81c784; }\n  .hardware-req.not-owned {\n    background-color: #e57373; }\n", ""]);
 
 // exports
 
@@ -3652,7 +3697,7 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
-exports.push([module.i, "ul {\n  padding-left: 5px; }\n\n.sketch {\n  list-style-type: none;\n  margin-bottom: 2rem;\n  border-radius: 5px;\n  position: relative; }\n  .sketch .info {\n    padding: 10px;\n    border: 4px solid white;\n    border-radius: 10px; }\n    .sketch .info.active {\n      background-color: #81c784; }\n      .sketch .info.active.selected {\n        border: 4px solid #1b5e20; }\n    .sketch .info.closed {\n      background-color: #e57373; }\n      .sketch .info.closed.selected {\n        border: 4px solid #b71c1c; }\n    .sketch .info.new-purchase {\n      background-color: #ab47bc; }\n      .sketch .info.new-purchase.selected {\n        border: 4px solid #4a148c; }\n  .sketch.new-button {\n    border: 1px solid gray;\n    padding: 10px;\n    cursor: pointer; }\n  .sketch .removeButton {\n    border-radius: 7px;\n    border: 0px;\n    position: absolute;\n    right: -10px;\n    top: -10px;\n    cursor: pointer; }\n  .sketch .marketplace-button {\n    border-radius: 7px;\n    border: 0px;\n    position: absolute;\n    right: -10px;\n    bottom: -10px;\n    cursor: pointer; }\n    .sketch .marketplace-button.publish-to-market {\n      background-color: #2196f3; }\n    .sketch .marketplace-button.remove-from-market {\n      background-color: #ff9800; }\n    .sketch .marketplace-button .fa-cloud-upload {\n      padding: 5px; }\n    .sketch .marketplace-button .fa-usd {\n      padding: 5px 10px; }\n\napp-click-to-edit {\n  display: inline-block; }\n\n.box-size-proper {\n  box-sizing: border-box;\n  -moz-box-sizing: border-box; }\n", ""]);
+exports.push([module.i, ".btn-group .btn {\n  border: 3px solid white; }\n  .btn-group .btn.full {\n    width: 100%; }\n  .btn-group .btn.half {\n    width: 49%; }\n  .btn-group .btn.selected {\n    border: 3px solid black; }\n\ninput.description {\n  margin-top: 20px;\n  padding: 15px 10px; }\n\n.status-button {\n  text-align: center;\n  border: 4px solid white;\n  border-radius: 10px; }\n  .status-button .btn {\n    color: white;\n    font-weight: bold;\n    padding: 15px 45px; }\n    .status-button .btn.closed {\n      background-color: #81c784; }\n      .status-button .btn.closed.selected {\n        border: 4px solid #1b5e20; }\n    .status-button .btn.active {\n      background-color: #e57373; }\n      .status-button .btn.active.selected {\n        border: 4px solid #b71c1c; }\n\n.sketch {\n  list-style-type: none;\n  margin-bottom: 2rem;\n  border-radius: 5px;\n  position: relative; }\n  .sketch .info {\n    padding: 10px;\n    border: 4px solid white;\n    border-radius: 10px; }\n    .sketch .info.active {\n      background-color: #81c784; }\n      .sketch .info.active.selected {\n        border: 4px solid #1b5e20; }\n    .sketch .info.closed {\n      background-color: #e57373; }\n      .sketch .info.closed.selected {\n        border: 4px solid #b71c1c; }\n    .sketch .info.new-purchase {\n      background-color: #ab47bc; }\n      .sketch .info.new-purchase.selected {\n        border: 4px solid #4a148c; }\n  .sketch.new-button {\n    border: 1px solid gray;\n    padding: 10px;\n    cursor: pointer; }\n  .sketch .removeButton {\n    border-radius: 7px;\n    border: 0px;\n    position: absolute;\n    right: -10px;\n    top: -10px;\n    cursor: pointer; }\n  .sketch .marketplace-button {\n    border-radius: 7px;\n    border: 0px;\n    position: absolute;\n    right: -10px;\n    bottom: -10px;\n    cursor: pointer; }\n    .sketch .marketplace-button.publish-to-market {\n      background-color: #2196f3; }\n    .sketch .marketplace-button.remove-from-market {\n      background-color: #ff9800; }\n    .sketch .marketplace-button .fa-cloud-upload {\n      padding: 5px; }\n    .sketch .marketplace-button .fa-usd {\n      padding: 5px 10px; }\n\napp-click-to-edit {\n  display: inline-block; }\n\napp-click-to-edit {\n  display: inline-block; }\n", ""]);
 
 // exports
 
@@ -3670,6 +3715,24 @@ exports = module.exports = __webpack_require__(16)();
 
 
 // module
+exports.push([module.i, "ul {\n  padding-left: 5px; }\n\n.sketch {\n  list-style-type: none;\n  margin-bottom: 2rem;\n  border-radius: 5px;\n  position: relative; }\n  .sketch .info {\n    padding: 10px;\n    border: 4px solid white;\n    border-radius: 10px; }\n    .sketch .info.active {\n      background-color: #81c784; }\n      .sketch .info.active.selected {\n        border: 4px solid #1b5e20; }\n    .sketch .info.closed {\n      background-color: #e57373; }\n      .sketch .info.closed.selected {\n        border: 4px solid #b71c1c; }\n    .sketch .info.new-purchase {\n      background-color: #ab47bc; }\n      .sketch .info.new-purchase.selected {\n        border: 4px solid #4a148c; }\n  .sketch.new-button {\n    border: 1px solid gray;\n    padding: 10px;\n    cursor: pointer; }\n  .sketch .removeButton {\n    border-radius: 7px;\n    border: 0px;\n    position: absolute;\n    right: -10px;\n    top: -10px;\n    cursor: pointer; }\n  .sketch .marketplace-button {\n    border-radius: 7px;\n    border: 0px;\n    position: absolute;\n    right: -10px;\n    bottom: -10px;\n    cursor: pointer; }\n    .sketch .marketplace-button.publish-to-market {\n      background-color: #2196f3; }\n    .sketch .marketplace-button.remove-from-market {\n      background-color: #ff9800; }\n    .sketch .marketplace-button .fa-cloud-upload {\n      padding: 5px; }\n    .sketch .marketplace-button .fa-usd {\n      padding: 5px 10px; }\n\napp-click-to-edit {\n  display: inline-block; }\n\n.box-size-proper {\n  box-sizing: border-box;\n  -moz-box-sizing: border-box; }\n", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ 722:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(16)();
+// imports
+
+
+// module
 exports.push([module.i, ".register-form {\n  margin-top: 100px;\n  text-align: center; }\n  .register-form input {\n    text-align: center; }\n  .register-form button {\n    margin-top: 10px; }\n", ""]);
 
 // exports
@@ -3680,112 +3743,112 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 727:
-/***/ (function(module, exports) {
-
-module.exports = "<div *ngIf=\"boards\" class=\"active-boards-container row \">\n  <div *ngFor=\"let board of boards\" class=\"{{configuration.class}}\">\n    <div class=\"board {{board.is_used ? 'used' : ''}} {{board.animated ? 'animate' : ''}} {{selectedBoard === board ? 'selected' : ''}}\" [ngStyle]=\"{'background-color': board.colour}\" (mousedown)=\"onBoardSelected(board)\" >\n      <p class=\"text-center\"  [ngClass]=\"{'mb-2 mt-2': board.subtype==='VirtualBoard' }\">\n        {{board.name}}\n        <!-- <app-click-to-edit [fieldValue]=\"board.getName()\" [fieldName]=\"'Board name'\" (nameUpdated)=\"onNameUpdated($event, board)\"></app-click-to-edit>\n        <i *ngIf=\"configuration.unregisterable\" (click)=\"onDeregisterBoard(board)\" class=\"fa fa-power-off pull-right\" aria-hidden=\"true\"></i> -->\n      </p>\n      <div *ngIf=\"board.subtype === 'RealBoard'\">\n        <p class=\"text-center\">\n          <span [class]=\"board.status\">{{board.status}}</span>\n        </p>\n        <!-- <p class=\"text-center mac\">{{board.mac}}</p> -->\n        <p *ngIf=\"board.status === 'offline'\" class=\"text-center activity\">\n          last active {{board.last_activity}}\n        </p>\n      </div>\n    </div>\n  </div>\n</div>\n"
-
-/***/ }),
-
 /***/ 728:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\n  <ul class=\"nav nav-tabs navigation\">\n    <li class=\"nav-item\" *ngIf=\"loggedIn()\">\n      <a class=\"username\" routerLink=\"/home\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Welcome {{userName()}}</a>\n    </li>\n    <li class=\"nav-item\" *ngIf=\"loggedIn()\">\n      <a (click)=\"logout()\">Log out</a>\n    </li>\n  </ul>\n  <router-outlet></router-outlet>\n</div>\n"
+module.exports = "<div *ngIf=\"boards\" class=\"active-boards-container row justify-content-sm-center \">\n  <div *ngFor=\"let board of boards\" class=\"{{configuration.class}}\">\n    <div class=\"board {{board.is_used ? 'used' : ''}} {{board.animated ? 'animate' : ''}} {{selectedBoard === board ? 'selected' : ''}}\" [ngStyle]=\"{'background-color': board.colour}\" (mousedown)=\"onBoardSelected(board)\" >\n      <p class=\"text-center\"  [ngClass]=\"{'mb-2 mt-2': board.subtype==='VirtualBoard' }\">\n        {{board.name}}\n        <!-- <app-click-to-edit [fieldValue]=\"board.getName()\" [fieldName]=\"'Board name'\" (nameUpdated)=\"onNameUpdated($event, board)\"></app-click-to-edit> -->\n        <i *ngIf=\"configuration.unregisterable\" (click)=\"onDeregisterBoard(board)\" class=\"fa fa-power-off pull-right\" aria-hidden=\"true\"></i>\n      </p>\n      <div *ngIf=\"board.subtype === 'RealBoard'\">\n        <p class=\"text-center\">\n          <span [class]=\"board.status\">{{board.status}}</span>\n        </p>\n        <!-- <p class=\"text-center mac\">{{board.mac}}</p> -->\n        <p *ngIf=\"board.status === 'offline'\" class=\"text-center activity\">\n          last active {{board.last_activity}}\n        </p>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
 /***/ 729:
 /***/ (function(module, exports) {
 
-module.exports = "<p class=\"text-muted text-center\">\n  You need to authenticate before accessing the dashboard or marketplace\n</p>\n<div class=\"row\">\n  <div class=\"col-sm-6 offset-sm-3\">\n    <div class=\"form-group\">\n      <label for=\"account-name\">Name</label>\n      <input [(ngModel)]=\"user.name\" type=\"text\" class=\"form-control\" id=\"account-name\" placeholder=\"Name\">\n    </div>\n    <div class=\"form-group\">\n      <label for=\"account-email\">Email address</label>\n      <input [(ngModel)]=\"user.email\" type=\"email\" class=\"form-control\" id=\"account-email\" placeholder=\"Enter email\">\n    </div>\n    <button class=\"btn btn-success\" (click)=\"submit()\" [disabled]=\"!user.isValid() || submitted\">\n      Login\n      <i class=\"fa fa-spinner fa-pulse fa-fw\" aria-hidden=\"true\" *ngIf=\"submitted\"></i>\n    </button>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\">\n  <ul class=\"nav nav-tabs navigation\">\n    <li class=\"nav-item\" *ngIf=\"loggedIn()\">\n      <a class=\"username\" routerLink=\"/home\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Welcome {{userName()}}</a>\n    </li>\n    <li class=\"nav-item\" *ngIf=\"loggedIn()\">\n      <a (click)=\"logout()\">Log out</a>\n    </li>\n  </ul>\n  <router-outlet></router-outlet>\n</div>\n"
 
 /***/ }),
 
 /***/ 730:
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"link\" class=\"details\">\n  <h2>Link: </h2>\n  <span>{{link.startBoard.getName()}}</span>\n  <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\n  <span>{{link.endBoard.getName()}}</span>\n  <span>\n    <select [(ngModel)]=\"link.logic\" name=\"Logic Type\" class=\"form-control\">\n      <option *ngFor=\"let option of link.getEndBoard().getBoardConfig().getAcceptedLinks()\" [attr.value]=\"option.name\">{{option.description}}</option>\n    </select>\n  </span>\n  <pre *ngIf=\"codeSnippets\">\n  {{renderCodeSnippet()}}\n  </pre>\n  <button type=\"button\" name=\"button\" (click)=\"updateLink(link)\" class=\"btn btn-success\">update</button>\n</div>\n<div *ngIf=\"board\" class=\"details\">\n  <h2 class=\"text-center mb-0\">Board </h2>\n  <div class=\"text-center\">\n    ({{board.mac}})\n  </div>\n  <p>\n    <label class=\"mb-0\">Type:</label>\n    <input [(ngModel)]=\"board.type\" placeholder=\"type\" class=\"form-control\" />\n  </p>\n  <p>\n    <label class=\"mb-0\">Name:</label>\n    <input [(ngModel)]=\"board.name\" placeholder=\"name\" class=\"form-control\" />\n  </p>\n  <div *ngFor=\"let field of metadata\" class=\"mb-1\">\n    <label class=\"mb-0\">{{field}}:</label>\n    <input [(ngModel)]=\"board.metadata[field]\" class=\"form-control\" >\n  </div>\n  <button type=\"button\" name=\"button\" (click)=\"updateBoard(board)\" class=\"btn full btn-success\">update</button>\n</div>\n"
+module.exports = "<p class=\"text-muted text-center\">\n  You need to authenticate before accessing the dashboard or marketplace\n</p>\n<div class=\"row\">\n  <div class=\"col-sm-6 offset-sm-3\">\n    <div class=\"form-group\">\n      <label for=\"account-name\">Name</label>\n      <input [(ngModel)]=\"user.name\" type=\"text\" class=\"form-control\" id=\"account-name\" placeholder=\"Name\">\n    </div>\n    <div class=\"form-group\">\n      <label for=\"account-email\">Email address</label>\n      <input [(ngModel)]=\"user.email\" type=\"email\" class=\"form-control\" id=\"account-email\" placeholder=\"Enter email\">\n    </div>\n    <button class=\"btn btn-success\" (click)=\"submit()\" [disabled]=\"!user.isValid() || submitted\">\n      Login\n      <i class=\"fa fa-spinner fa-pulse fa-fw\" aria-hidden=\"true\" *ngIf=\"submitted\"></i>\n    </button>\n  </div>\n</div>\n"
 
 /***/ }),
 
 /***/ 731:
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!editable && fieldValue\" (click)=\"onClick($event);\" class=\"read-only text-center\">\n  <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n  {{fieldValue}}\n</div>\n<div *ngIf=\"editable\">\n  <div class=\"form-inline edit-form\">\n    <div class=\"input-group\">\n      <input [(ngModel)]=\"fieldValue\" name=\"{{fieldName}}\" (click)=\"$event.stopPropagation();\"  class=\"form-control text-center\" placeholder=\"{{fieldName}}\">\n      <button class=\"input-group-addon\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\" (click)=\"onSave($event); \"></i></button>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div *ngIf=\"link\" class=\"details\">\n  <h2>Link: </h2>\n  <span>{{link.startBoard.getName()}}</span>\n  <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\n  <span>{{link.endBoard.getName()}}</span>\n  <span>\n    <select (ngModelChange)=\"updateLink(link)\" [(ngModel)]=\"link.logic\" name=\"Logic Type\" class=\"form-control\">\n      <option *ngFor=\"let option of link.getEndBoard().getBoardConfig().getAcceptedLinks()\" [attr.value]=\"option.name\">{{option.description}}</option>\n    </select>\n  </span>\n  <div *ngIf=\"codeSnippets\">\n    <button (click)=\"toggle()\" class=\"btn full btn-info mt-3 mb-2\" type=\"button\" name=\"button\">{{showCode ? 'Hide' : 'Show Code'}}</button>\n    <pre *ngIf=\"showCode\">  {{renderCodeSnippet()}}</pre>\n  </div>\n</div>\n<div *ngIf=\"board\" class=\"details pb-3\">\n  <h2 class=\"text-center mb-0\">Board </h2>\n  <div class=\"text-center\">\n    ({{board.mac | truncate}})\n  </div>\n  <p>\n    <label class=\"mb-0\">Type:</label>\n    <input [(ngModel)]=\"board.type\" placeholder=\"type\" class=\"form-control\" />\n  </p>\n  <p>\n    <label class=\"mb-0\">Name:</label>\n    <input [(ngModel)]=\"board.name\" placeholder=\"name\" class=\"form-control\" />\n  </p>\n  <div *ngFor=\"let field of metadata\" class=\"mb-1\">\n    <label class=\"mb-0\">{{field}}:</label>\n    <input [(ngModel)]=\"board.metadata[field]\" class=\"form-control\" >\n  </div>\n  <button type=\"button\" name=\"button\" (click)=\"updateBoard(board)\" class=\"btn full btn-success\">update</button>\n</div>\n"
 
 /***/ }),
 
 /***/ 732:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"sixteen-nine\" #myCanvasContainer>\n  <canvas class=\"canvas\" #myCanvas (click)='clicked($event)' [ngClass]=\"{'dragging': dragging, 'draggable': canSelect}\">\n  </canvas>\n</div>\n"
+module.exports = "<div *ngIf=\"!editable && fieldValue\" (click)=\"onClick($event);\" class=\"read-only text-center\">\n  <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n  {{fieldValue}}\n</div>\n<div *ngIf=\"editable\">\n  <div class=\"form-inline edit-form\">\n    <div class=\"input-group\">\n      <input [(ngModel)]=\"fieldValue\" name=\"{{fieldName}}\" (click)=\"$event.stopPropagation();\"  class=\"form-control text-center\" placeholder=\"{{fieldName}}\">\n      <button class=\"input-group-addon\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\" (click)=\"onSave($event); \"></i></button>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
 /***/ 733:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"home-container\">\n  <div class=\"row\">\n      <div class=\"col-md-6\">\n        <ul class=\"list-group pages\">\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\"routerLink=\"/sketches\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Sketches</button>\n          </li>\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\" routerLink=\"/laptop\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Laptop</button>\n          </li>\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\" routerLink=\"/logs\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Sketch Logs</button>\n          </li>\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\" routerLink=\"/marketplace\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Marketplace</button>\n          </li>\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\" routerLink=\"/myboards\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">My Boards</button>\n          </li>\n        </ul>\n      </div>\n      <div class=\"col-md-6\">\n        <app-sketch-manager></app-sketch-manager>\n      </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"sixteen-nine\" #myCanvasContainer>\n  <canvas class=\"canvas\" #myCanvas (click)='clicked($event)' [ngClass]=\"{'dragging': dragging, 'draggable': canSelect}\">\n  </canvas>\n</div>\n"
 
 /***/ }),
 
 /***/ 734:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"full-height\">\n  <button type=\"button\" name=\"button\" class=\"btn btn-success\" (click)=\"triggerInput()\">PUSH</button>\n</div>\n"
+module.exports = "<div class=\"home-container\">\n  <div class=\"row\">\n      <div class=\"col-md-6\">\n        <ul class=\"list-group pages\">\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\"routerLink=\"/sketches\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Sketches</button>\n          </li>\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\" routerLink=\"/laptop\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Laptop</button>\n          </li>\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\" routerLink=\"/logs\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Sketch Logs</button>\n          </li>\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\" routerLink=\"/marketplace\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Marketplace</button>\n          </li>\n          <li class=\"\">\n            <button class=\"btn btn-outline-primary btn-lg btn-block\" routerLink=\"/myboards\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">My Boards</button>\n          </li>\n        </ul>\n      </div>\n      <div class=\"col-md-6\">\n        <app-sketch-manager></app-sketch-manager>\n      </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
 /***/ 735:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"full-height\">\n  <button type=\"button\" name=\"button\" class=\"btn btn-primary\">SCREEN</button>\n</div>\n"
+module.exports = "<div class=\"full-height\">\n  <button type=\"button\" name=\"button\" class=\"btn btn-success\" (click)=\"triggerInput()\">PUSH</button>\n</div>\n"
 
 /***/ }),
 
 /***/ 736:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-6 full left\"  (click)=\"activateInput()\">\n    <span>INPUT</span>\n  </div>\n  <div class=\"col-6 full right\" (click)=\"activateOutput()\">\n    <span>SCREEN</span>\n  </div>\n</div>\n"
+module.exports = "<div class=\"full-height\">\n  <button type=\"button\" name=\"button\" class=\"btn btn-primary\">SCREEN</button>\n</div>\n"
 
 /***/ }),
 
 /***/ 737:
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"logs\">\n  <table class=\"table table-striped\">\n    <thead>\n      <tr>\n        <th>ID</th>\n        <th>Type</th>\n        <th>Message</th>\n        <th>Time</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let log of logs\" class=\"log\">\n        <th scope=\"row\">{{log.id}}</th>\n        <td class=\"{{log.log_type | dasherize }}\" >{{log.log_type | capitalize }}</td>\n        <td>{{log.message}}</td>\n        <td>{{log.created_at}}</td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<div class=\"row\">\n  <div class=\"col-6 full left\"  (click)=\"activateInput()\">\n    <span>INPUT</span>\n  </div>\n  <div class=\"col-6 full right\" (click)=\"activateOutput()\">\n    <span>SCREEN</span>\n  </div>\n</div>\n"
 
 /***/ }),
 
 /***/ 738:
 /***/ (function(module, exports) {
 
-module.exports = "<script src=\"https://checkout.stripe.com/checkout.js\"></script>\n<div *ngIf=\"sketches && boards\" class=\"row\">\n  <div class=\"col-sm-6 offset-sm-3\">\n    <ul class=\"list-group\">\n      <li class=\"list-group-item row\" *ngFor=\"let sketch of sketches\">\n        <div class=\"col-10\">\n          <h3>\n            {{sketch.id}}. {{sketch.name}}\n          </h3>\n          <p class=\"text-muted\">\n            {{sketch.description}}\n          </p>\n          <p>\n            <b>Required Hardware</b>\n            <span *ngFor=\"let board of sketch.getBoardConfigs() | realBoards \" class=\"hardware-req {{hardwareClass(board.type)}}\">\n              {{board.type}}\n            </span>\n          </p>\n          <p class=\"text-right\">\n            Created by: {{sketch.user}}\n          </p>\n          <p class=\"text-muted\" *ngIf=\"!ownAllBoards(sketch)\">\n            You don't own the following required hardware: {{missingBoards(sketch) }}\n          </p>\n          <p class=\"text-muted\" *ngIf=\"mySketch(sketch)\">\n            You already own this sketch\n          </p>\n        </div>\n        <div *ngIf=\"canBuySketch(sketch)\">\n          <button (click)=\"openCheckout(sketch)\" class=\"btn btn-info\">Buy</button>\n        </div>\n        <div *ngIf=\"!canBuySketch(sketch)\">\n          <button disabled=\"disabled\" class=\"btn btn-info\">Buy</button>\n        </div>\n      </li>\n    </ul>\n  </div>\n</div>\n\n<div *ngIf=\"sketches && sketches.length == 0\" class=\"row\">\n  <div class=\"col-sm-6 offset-sm-3\">\n    <p class=\"text-muted text-center\">\n      There are no sketches for sale at the moment..\n    </p>\n  </div>\n</div>\n"
+module.exports = "<div *ngIf=\"logs\">\n  <table class=\"table table-striped\">\n    <thead>\n      <tr>\n        <th>ID</th>\n        <th>Type</th>\n        <th>Message</th>\n        <th>Time</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let log of logs\" class=\"log\">\n        <th scope=\"row\">{{log.id}}</th>\n        <td class=\"{{log.log_type | dasherize }}\" >{{log.log_type | capitalize }}</td>\n        <td>{{log.message}}</td>\n        <td>{{log.created_at}}</td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
 /***/ 739:
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"sketch\" class=\"row\">\n  <div class=\"col-sm-3\">\n    <button type=\"button\" name=\"button\" class=\"btn btn-success\" (click)=\"navigateToHome()\">HOME</button>\n  </div>\n  <div class=\"col-sm-3 text-center mb-3 mt-3 h1\">\n      <app-click-to-edit [fieldValue]=\"sketch.getName()\" [fieldName]=\"'Sketch name'\" (nameUpdated)=\"onNameUpdated($event)\"></app-click-to-edit>\n      <div class=\"btn-group mr-2 status-button\" role=\"group\" aria-label=\"First group\">\n        <button *ngIf=\"sketch.status=='closed'\" type=\"button\" class=\"btn btn-secondary closed\" (click)=\"activateSketch(idx)\">\n          Activate\n        </button>\n        <button *ngIf=\"sketch.status=='active'\" type=\"button\" class=\"btn btn-secondary active\" (click)=\"stopSketch(idx)\">\n          Stop\n        </button>\n      </div>\n  </div>\n  <div class=\"col-sm-6\">\n\n  </div>\n</div>\n<div *ngIf=\"sketch\" class=\"row\">\n  <div class=\"col-md-2 pt-2\">\n    <div *ngIf=\"boards\">\n      <ul class=\"nav nav-tabs\">\n        <li class=\"nav-item\">\n          <a class=\"nav-link\" [ngClass]=\"{'active' : displayRealBoards }\" (click)=\"showRealBoards()\">Real</a>\n        </li>\n        <li class=\"nav-item\">\n          <a class=\"nav-link\" [ngClass]=\"{'active' : !displayRealBoards }\" (click)=\"showVirtualBoards()\">Virtual</a>\n        </li>\n      </ul>\n      <div *ngIf=\"displayRealBoards\">\n        <app-active-boards [boards]=\"boards | realBoards\" [selectedBoard]=\"newBoard\" (onBoardSave)=\"onBoardSave($event)\" (boardSelectedEmitter)=\"onActiveBoardSelected($event)\"></app-active-boards>\n      </div>\n      <div *ngIf=\"!displayRealBoards\">\n        <app-active-boards [boards]=\"(boards | virtualBoards)\" [selectedBoard]=\"newBoard\" (onBoardSave)=\"onBoardSave($event)\" (boardSelectedEmitter)=\"onActiveBoardSelected($event)\"></app-active-boards>\n      </div>\n    </div>\n  </div>\n  <div class=\"col-md-8\">\n    <div class=\"btn-group commands-wrapper mb-2 row\" role=\"group\" aria-label=\"First group\">\n      <div class=\"col-sm-3\">\n        <button [ngClass]=\"{'selected': operationMode==='Delete' }\" type=\"button\" class=\"btn btn-secondary btn-danger full\" (click)=\"changeMode('Delete')\"> Delete </button>\n      </div>\n      <div class=\"col-sm-6 text-center\">\n        <button *ngIf=\"!sketch.saved\" type=\"button\" class=\"btn btn-success half\" (click)=\"drag_drop.saveSketch()\"> Save </button>\n        <button *ngIf=\"!sketch.saved\" type=\"button\" class=\"btn btn-warning half\" (click)=\"revertToActive()\" >Revert</button>\n      </div>\n      <div class=\"col-sm-3\">\n        <button [ngClass]=\"{'selected': operationMode==='Link' }\" type=\"button\" class=\"btn btn-primary full\" (click)=\"changeMode('Link')\"> Link </button>\n      </div>\n    </div>\n    <app-drag-drop #drag_drop [sketch]=\"sketch\" [newBoard]=\"newBoard\" [operationMode]=\"operationMode\" (onLinkSelected)=\"onLinkSelected($event)\" (onLinkDeselected)=\"onLinkDeselected()\" (onBoardSelected)=\"onBoardSelected($event)\" (onBoardDeselected)=\"onBoardDeselected()\" (finishedDeletingBoard)=\"onFinishedDeletingBoard($event)\" (finishedAddingBoard)=\"onFinishedAddingBoard($event)\"></app-drag-drop>\n    <input [(ngModel)]=\"sketch.description\" name=\"sketch-description\" class=\"form-control description\" placeholder=\"Sketch description (for marketplace)\">\n  </div>\n  <app-board-details class='col-md-2' [board]=\"selectedBoard\" (onBoardSave)=\"onBoardSave($event)\" [link]=\"selectedLink\" (onLinkSave)=\"onLinkSave($event)\" [linkOptions]=\"links\"></app-board-details>\n</div>\n"
+module.exports = "<script src=\"https://checkout.stripe.com/checkout.js\"></script>\n<div *ngIf=\"sketches && boards\" class=\"row justify-content-sm-center mt-3\">\n  <div class=\"col-sm-6\">\n    <ul class=\"list-group\">\n      <li class=\"list-group-item row mb-3 sketch\" *ngFor=\"let sketch of sketches; let idx = index\">\n        <div class=\"col-sm-12\">\n          <h3>\n            {{idx+1}}. {{sketch.name}}\n          </h3>\n          <p class=\"text-right\">\n            Created by: {{sketch.user}}\n          </p>\n          <p class=\"text-muted\">\n            {{sketch.description}}\n          </p>\n          <p>\n            <b>Required Hardware:</b>\n            <span *ngFor=\"let board of sketch.getBoardConfigs() | realBoards \" class=\"hardware-req {{hardwareClass(board.type)}}\">\n              {{board.type}}\n            </span>\n          </p>\n          <p class=\"text-muted\" *ngIf=\"!ownAllBoards(sketch)\">\n            You don't own the following required hardware: {{missingBoards(sketch) }}\n          </p>\n          <p class=\"text-muted\" *ngIf=\"mySketch(sketch)\">\n            You already own this sketch\n          </p>\n          <div *ngIf=\"canBuySketch(sketch)\">\n            <button (click)=\"openCheckout(sketch)\" class=\"btn btn-primary btn-lg btn-block\">Buy</button>\n          </div>\n          <div *ngIf=\"!canBuySketch(sketch)\">\n            <button disabled=\"disabled\" class=\"btn btn-primary btn-lg btn-block\">Buy</button>\n          </div>\n        </div>\n      </li>\n    </ul>\n  </div>\n</div>\n\n<div *ngIf=\"sketches && sketches.length == 0\" class=\"row justify-content-sm-center\">\n  <div class=\"col-sm-6\">\n    <p class=\"text-muted text-center\">\n      There are no sketches for sale at the moment..\n    </p>\n  </div>\n</div>\n"
 
 /***/ }),
 
 /***/ 740:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"box-size-proper\">\n  <div class=\"row justify-content-md-center\">\n    <div class=\"col-sm-8 pt-2\">\n      <div *ngIf=\"sketches\" class=\"sketchesBar\">\n        <div  class=\"text-center sketch {{sketch.status}}\" *ngFor=\"let sketch of sketches; let idx = index\">\n          <button class=\"removeButton\" name=\"button\">\n            <i class=\"fa fa-times\" (click)=\"removeSketch(idx)\" aria-hidden=\"true\"></i>\n          </button>\n          <button class=\"marketplace-button remove-from-market\" *ngIf=\"sketch.listed\" (click)=\"removeFromMarket(idx)\">\n            <i class=\"fa fa-usd\" aria-hidden=\"true\"></i>\n          </button>\n          <button class=\"marketplace-button publish-to-market\" *ngIf=\"!sketch.listed\" (click)=\"publishToMarket(idx)\">\n            <i class=\"fa fa-cloud-upload\" aria-hidden=\"true\"></i>\n          </button>\n          <div (click)=\"onSketchEdit(idx)\" class=\"info {{sketch.status}} {{sketch === selectedSketch ? 'selected' : ''}} {{sketch.newPurchase ? 'new-purchase' : ''}}\">\n            <div class=\"text_center\">\n              <app-click-to-edit [fieldValue]=\"sketch.getName()\" [fieldName]=\"'Sketch name'\" (nameUpdated)=\"onNameUpdated($event);\"></app-click-to-edit>\n            </div>\n            <div class=\"btn-group mr-2\" role=\"group\" aria-label=\"First group\">\n              <button *ngIf=\"sketch.status=='closed'\" type=\"button\" class=\"btn btn-secondary\" (click)=\"activateSketch(idx, $event);\">\n                Activate\n              </button>\n              <button *ngIf=\"sketch.status=='active'\" type=\"button\" class=\"btn btn-secondary\" (click)=\"stopSketch(idx, $event);\">\n                Stop\n              </button>\n            </div>\n            <p *ngIf=\"sketch.newPurchase\" class=\"new-purchase-info\">Just Purchased</p>\n          </div>\n        </div>\n        <div class=\"sketch new-button text-center\" (click)=\"newSketch()\">\n          New Sketch\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div *ngIf=\"sketch\">\n  <div class=\"row justify-content-sm-center mt-2\">\n    <!-- <div class=\"col-sm-3\">\n    <button type=\"button\" name=\"button\" class=\"btn btn-success\" (click)=\"navigateToHome()\">HOME</button>\n  </div> -->\n  <div class=\"col-sm-12\">\n    <div  class=\"text-center sketch {{sketch.status}}\">\n      <button class=\"marketplace-button remove-from-market\" *ngIf=\"sketch.listed\" (click)=\"removeFromMarket(idx)\">\n        <i class=\"fa fa-usd\" aria-hidden=\"true\"></i>\n      </button>\n      <button class=\"marketplace-button publish-to-market\" *ngIf=\"!sketch.listed\" (click)=\"publishToMarket(idx)\">\n        <i class=\"fa fa-cloud-upload\" aria-hidden=\"true\"></i>\n      </button>\n      <div class=\"info {{sketch.status}}\">\n        <div class=\"text_center\">\n          <app-click-to-edit [fieldValue]=\"sketch.getName()\" [fieldName]=\"'Sketch name'\" (nameUpdated)=\"onNameUpdated($event)\"></app-click-to-edit>\n        </div>\n        <div class=\"btn-group mr-2\" role=\"group\" aria-label=\"First group\">\n          <button *ngIf=\"sketch.status=='closed'\" type=\"button\" class=\"btn btn-secondary\" (click)=\"activateSketch(idx);\">\n            Activate\n          </button>\n          <button *ngIf=\"sketch.status=='active'\" type=\"button\" class=\"btn btn-secondary\" (click)=\"stopSketch(idx);\">\n            Stop\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n  <!-- <div class=\"col-sm-3 text-center mb-3 mt-3 h1\">\n  <app-click-to-edit [fieldValue]=\"sketch.getName()\" [fieldName]=\"'Sketch name'\" (nameUpdated)=\"onNameUpdated($event)\"></app-click-to-edit>\n  <div class=\"btn-group mr-2 status-button\" role=\"group\" aria-label=\"First group\">\n  <button *ngIf=\"sketch.status=='closed'\" type=\"button\" class=\"btn btn-secondary closed\" (click)=\"activateSketch(idx)\">\n  Activate\n</button>\n<button *ngIf=\"sketch.status=='active'\" type=\"button\" class=\"btn btn-secondary active\" (click)=\"stopSketch(idx)\">\nStop\n</button>\n</div>\n</div> -->\n<div class=\"col-sm-6\">\n\n</div>\n</div>\n  <div class=\"row\">\n    <div class=\"col-md-3  col-lg-2 col-sm-12 pt-2 mb-3\">\n      <div *ngIf=\"boards\">\n        <ul class=\"nav nav-tabs\">\n          <li class=\"nav-item\">\n            <a class=\"nav-link\" [ngClass]=\"{'active' : displayRealBoards }\" (click)=\"showRealBoards()\">Real</a>\n          </li>\n          <li class=\"nav-item\">\n            <a class=\"nav-link\" [ngClass]=\"{'active' : !displayRealBoards }\" (click)=\"showVirtualBoards()\">Virtual</a>\n          </li>\n        </ul>\n        <div class=\"mt-2\">\n          <div *ngIf=\"displayRealBoards\">\n            <app-active-boards [boards]=\"boards | realBoards\" [selectedBoard]=\"newBoard\" (onBoardSave)=\"onBoardSave($event)\" (boardSelectedEmitter)=\"onActiveBoardSelected($event)\"></app-active-boards>\n          </div>\n          <div *ngIf=\"!displayRealBoards\">\n            <app-active-boards [boards]=\"(boards | virtualBoards)\" [selectedBoard]=\"newBoard\" (onBoardSave)=\"onBoardSave($event)\" (boardSelectedEmitter)=\"onActiveBoardSelected($event)\"></app-active-boards>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-md-9 col-lg-10\">\n      <div class=\"row\">\n        <div class=\"col-lg-8 col-xl-9\">\n          <div class=\"mb-2 row\" role=\"group\" aria-label=\"First group\">\n            <div class=\"col-sm-3\">\n              <button [ngClass]=\"{'selected': operationMode==='Delete' }\" type=\"button\" class=\"btn btn-secondary btn-danger btn-lg btn-block\" (click)=\"changeMode('Delete')\"> Delete </button>\n            </div>\n            <div class=\"col-sm-3\">\n              <button *ngIf=\"!sketch.saved\" type=\"button\" class=\"btn btn-success btn-lg btn-block\" (click)=\"drag_drop.saveSketch()\"> Save </button>\n            </div>\n            <div class=\"col-sm-3\">\n              <button *ngIf=\"!sketch.saved\" type=\"button\" class=\"btn btn-warning btn-lg btn-block\" (click)=\"revertToActive()\" >Revert</button>\n            </div>\n            <div class=\"col-sm-3\">\n              <button [ngClass]=\"{'selected': operationMode==='Link' }\" type=\"button\" class=\"btn btn-primary btn-lg btn-block\" (click)=\"changeMode('Link')\"> Link </button>\n            </div>\n          </div>\n          <app-drag-drop #drag_drop [sketch]=\"sketch\" [newBoard]=\"newBoard\" [operationMode]=\"operationMode\" (onLinkSelected)=\"onLinkSelected($event)\" (onLinkDeselected)=\"onLinkDeselected()\" (onBoardSelected)=\"onBoardSelected($event)\" (onBoardDeselected)=\"onBoardDeselected()\" (finishedDeletingBoard)=\"onFinishedDeletingBoard($event)\" (finishedAddingBoard)=\"onFinishedAddingBoard($event)\"></app-drag-drop>\n          <input [(ngModel)]=\"sketch.description\" name=\"sketch-description\" class=\"form-control description mb-3\" placeholder=\"Sketch description (for marketplace)\">\n        </div>\n        <app-board-details class='col-lg-4 col-xl-3' [board]=\"selectedBoard\" (onBoardSave)=\"onBoardSave($event)\" [link]=\"selectedLink\" (onLinkSave)=\"onLinkSave($event)\" [linkOptions]=\"links\"></app-board-details>\n      </div>\n    </div>\n  </div>\n\n</div>\n"
 
 /***/ }),
 
 /***/ 741:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"user-boards-container\">\n  <div class=\"row\">\n    <div class=\"col-sm-4 offset-sm-4 register-form\">\n      <span>\n        <label>Last 4 digits of MAC: </label> <br>\n        <input [(ngModel)]=\"code\" placeholder=\"XXXX\" />\n      </span>\n      <br>\n      <button type=\"button\" name=\"button\" (click)=\"registerBoard(code)\" class=\"btn btn-success\">Submit</button>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-sm-10 text-center\">\n      <app-active-boards [boards]=\"boards\" [selectedBoard]=\"newBoard\" (boardDeregisterEmitter)=\"deregisterBoard($event)\" [config]=\"getActiveBoardsConfig()\"></app-active-boards>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"box-size-proper\">\n  <div class=\"row justify-content-sm-center\">\n    <div class=\"col-sm-8 pt-2\">\n      <div *ngIf=\"sketches\" class=\"sketchesBar\">\n        <div  class=\"text-center sketch {{sketch.status}}\" *ngFor=\"let sketch of sketches; let idx = index\">\n          <button class=\"removeButton\" name=\"button\">\n            <i class=\"fa fa-times\" (click)=\"removeSketch(idx)\" aria-hidden=\"true\"></i>\n          </button>\n          <button class=\"marketplace-button remove-from-market\" *ngIf=\"sketch.listed\" (click)=\"removeFromMarket(idx)\">\n            <i class=\"fa fa-usd\" aria-hidden=\"true\"></i>\n          </button>\n          <button class=\"marketplace-button publish-to-market\" *ngIf=\"!sketch.listed\" (click)=\"publishToMarket(idx)\">\n            <i class=\"fa fa-cloud-upload\" aria-hidden=\"true\"></i>\n          </button>\n          <div (click)=\"onSketchEdit(idx)\" class=\"info {{sketch.status}} {{sketch === selectedSketch ? 'selected' : ''}} {{sketch.newPurchase ? 'new-purchase' : ''}}\">\n            <div class=\"text_center\">\n              <app-click-to-edit [fieldValue]=\"sketch.getName()\" [fieldName]=\"'Sketch name'\" (nameUpdated)=\"onNameUpdated(i$event);\"></app-click-to-edit>\n            </div>\n            <div class=\"btn-group mr-2\" role=\"group\" aria-label=\"First group\">\n              <button *ngIf=\"sketch.status=='closed'\" type=\"button\" class=\"btn btn-secondary\" (click)=\"activateSketch(idx, $event);\">\n                Activate\n              </button>\n              <button *ngIf=\"sketch.status=='active'\" type=\"button\" class=\"btn btn-secondary\" (click)=\"stopSketch(idx, $event);\">\n                Stop\n              </button>\n            </div>\n            <p *ngIf=\"sketch.newPurchase\" class=\"new-purchase-info\">Just Purchased</p>\n          </div>\n        </div>\n        <div class=\"sketch new-button text-center\" (click)=\"newSketch()\">\n          New Sketch\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
-/***/ 774:
+/***/ 742:
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"user-boards-container\">\n  <div class=\"row \">\n    <div class=\"col-sm-4 offset-sm-4 register-form\">\n      <span>\n        <label>Last 4 digits of MAC: </label> <br>\n        <input [(ngModel)]=\"code\" placeholder=\"XXXX\" />\n      </span>\n      <br>\n      <button type=\"button\" name=\"button\" (click)=\"registerBoard(code)\" class=\"btn btn-success\">Submit</button>\n    </div>\n  </div>\n  <div class=\"row mt-3\">\n    <div class=\"col-sm-12 text-center\">\n      <app-active-boards [boards]=\"boards\" [selectedBoard]=\"newBoard\" (boardDeregisterEmitter)=\"deregisterBoard($event)\" [config]=\"getActiveBoardsConfig()\"></app-active-boards>\n    </div>\n  </div>\n</div>\n"
+
+/***/ }),
+
+/***/ 775:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(417);
@@ -3829,7 +3892,7 @@ var BoardService = (function () {
         var search = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* URLSearchParams */]();
         search.set('user_id', localStorage.getItem('atrato-user-id'));
         return this.http
-            .get(this.apiUrl + "/" + mac + ".json", { search: search })
+            .get(this.apiUrl + "/" + mac.split('.').join('%2E') + ".json", { search: search })
             .toPromise()
             .then(function (response) { return new __WEBPACK_IMPORTED_MODULE_3__board_config__["a" /* BoardConfig */](response.json()); })
             .catch(this.handleError);
@@ -3845,9 +3908,9 @@ var BoardService = (function () {
             .catch(this.handleError);
     };
     BoardService.prototype.update = function (board) {
-        var url = this.apiUrl + "/" + board.getMac();
+        var url = this.apiUrl + "/" + board.getMac().split('.').join('%2E');
         return this.http
-            .put(url, this.board_params(board), { headers: this.headers })
+            .put(encodeURI(url), this.board_params(board), { headers: this.headers })
             .toPromise()
             .then(function () { return board; })
             .catch(this.handleError);
@@ -3892,5 +3955,5 @@ var BoardService = (function () {
 
 /***/ })
 
-},[774]);
+},[775]);
 //# sourceMappingURL=main.bundle.js.map
