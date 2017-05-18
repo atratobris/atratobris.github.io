@@ -1956,7 +1956,13 @@ var UserBoardsComponent = (function () {
         return this.active_board_config;
     };
     UserBoardsComponent.prototype.deregisterBoard = function (board) {
-        this.boardService.deregister(board);
+        var _this = this;
+        this.boardService.deregister(board).then(function (b) {
+            if (board.mac === b.mac) {
+                var idx = _this.boards.indexOf(board);
+                _this.boards.splice(idx, 1);
+            }
+        });
     };
     UserBoardsComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -3928,9 +3934,7 @@ var BoardService = (function () {
         return this.http
             .post(this.apiUrl + "/deregister.json", this.board_params(board), { headers: this.headers })
             .toPromise()
-            .then(function (response) {
-            console.log('Success');
-        })
+            .then(function (response) { return new __WEBPACK_IMPORTED_MODULE_3__board_config__["a" /* BoardConfig */](response.json()); })
             .catch(this.handleError);
     };
     BoardService.prototype.handleError = function (error) {
